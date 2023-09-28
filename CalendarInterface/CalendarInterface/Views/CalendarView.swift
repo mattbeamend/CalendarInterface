@@ -14,19 +14,27 @@ struct CalendarView: View {
     
     // Test data must also use UTC timezone
     let events = [
-        Event(id: "1", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T10:00:00+0000"), end: stringToDate(dateString: "2023-09-28T11:45:00+0000"))
+        Event(id: "1", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"), color: Color.blue),
+        Event(id: "2", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"), color: Color.green),
+        Event(id: "3", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-28T11:00:00+0000"), end: stringToDate(dateString: "2023-09-28T11:30:00+0000"), color: Color.red)
     ]
     
     var body: some View {
         ScrollView {
             ZStack {
                 grid
-                VStack {
-                    EventBlock(event: events.first!)
-                    Spacer()
+                HStack {
+                    Spacer().frame(width: 55)
+                    VStack {
+                        ZStack(alignment:.top) {
+                            EventBlock(event: events.first!)
+                            EventBlock(event: events[1])
+                            EventBlock(event: events[2])
+                        }
+                        Spacer()
+                    }
+                    .offset(y: 10)
                 }
-                .offset(y: 10)
-                
             }
         }
     }
@@ -61,10 +69,23 @@ extension CalendarView {
     
     @ViewBuilder
     private func EventBlock(event: Event) -> some View {
-        Rectangle()
-            .frame(width: 150, height: calculateDuration(event: event))
-            .foregroundColor(Color.blue)
-            .offset(y: calculatePosition(event: event))
+        VStack(alignment: .leading) {
+            if(calculateDuration(event: event) >= 30) {
+                Text(event.name)
+                    .font(.system(size: 13))
+                    .foregroundColor(Color.white)
+                    .padding(10)
+            }
+            Spacer()
+        }
+        .frame(height: calculateDuration(event: event), alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 5)
+                .foregroundColor(event.color)
+                .padding(1)
+        )
+        .offset(y: calculatePosition(event: event))
     }
 }
 
