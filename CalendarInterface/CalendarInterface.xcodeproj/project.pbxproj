@@ -58,12 +58,11 @@
 			isa = PBXGroup;
 			children = (
 				662161562AC5D05100347853 /* CalendarInterfaceApp.swift */,
-				662161582AC5D05100347853 /* ContentView.swift */,
-				6621615A2AC5D05200347853 /* Assets.xcassets */,
+				6621616A2AC5D0FA00347853 /* Views */,
+				6621616B2AC5D0FF00347853 /* ViewModels */,
+				6621616C2AC5D10300347853 /* Models */,
 				6621615C2AC5D05200347853 /* Preview Content */,
-				662161642AC5D06000347853 /* Event.swift */,
-				662161662AC5D08100347853 /* CalendarViewModel.swift */,
-				662161682AC5D09200347853 /* CalendarView.swift */,
+				6621615A2AC5D05200347853 /* Assets.xcassets */,
 			);
 			path = CalendarInterface;
 			sourceTree = "<group>";
@@ -74,6 +73,31 @@
 				6621615D2AC5D05200347853 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6621616A2AC5D0FA00347853 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				662161582AC5D05100347853 /* ContentView.swift */,
+				662161682AC5D09200347853 /* CalendarView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6621616B2AC5D0FF00347853 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				662161662AC5D08100347853 /* CalendarViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		6621616C2AC5D10300347853 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				662161642AC5D06000347853 /* Event.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
