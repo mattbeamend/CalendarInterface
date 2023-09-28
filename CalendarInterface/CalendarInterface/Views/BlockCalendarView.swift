@@ -1,5 +1,5 @@
 //
-//  CalendarView.swift
+//  BlockCalendarView.swift
 //  CalendarInterface
 //
 //  Created by Matthew Smith on 28/09/2023.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CalendarView: View {
+struct BlockCalendarView: View {
     
     // NOTE: You should convert start/end times from local to UTC timezone before storing.
     // Swift will then automatically convert back to local timezone when Date object is created.
@@ -40,7 +40,7 @@ struct CalendarView: View {
     }
 }
 
-extension CalendarView {
+extension BlockCalendarView {
     
     private var grid: some View {
         VStack {
@@ -109,6 +109,6 @@ func calculateDuration(event: Event) -> CGFloat {
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView()
+        BlockCalendarView()
     }
 }
