@@ -55,6 +55,18 @@ extension Date {
         return formatter.string(from: self)
     }
     
+    func getTimeString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: self)
+    }
+    
+    func getFullDateString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E d MMM"
+        return formatter.string(from: self)
+    }
+    
     func getStartMonthPosition() -> Int {
         let start = self.startOfMonth()
         let day = Calendar.current.component(.weekday, from: start)
