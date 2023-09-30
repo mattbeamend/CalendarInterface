@@ -14,9 +14,9 @@ struct BlockCalendarView: View {
     
     // Test data must also use UTC timezone
     let events = [
-        Event(id: "1", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"), color: Color.blue),
-        Event(id: "2", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"), color: Color.green),
-        Event(id: "3", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-28T11:00:00+0000"), end: stringToDate(dateString: "2023-09-28T11:30:00+0000"), color: Color.red)
+        Event(id: "1", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"), color: Color.blue, allDay: false),
+        Event(id: "2", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"), color: Color.green, allDay: false),
+        Event(id: "3", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-28T11:00:00+0000"), end: stringToDate(dateString: "2023-09-28T11:30:00+0000"), color: Color.red, allDay: false)
     ]
     
     var body: some View {

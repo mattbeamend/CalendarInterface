@@ -8,10 +8,11 @@
 import Foundation
 import SwiftUI
 
-struct Event {
+struct Event: Identifiable, Hashable {
     var id: String
     var name: String
     var start: Date
     var end: Date
     var color: Color
+    var allDay: Bool
 }
