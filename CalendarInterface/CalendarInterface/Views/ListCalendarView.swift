@@ -38,7 +38,7 @@ struct ListCalendarView: View {
 extension ListCalendarView {
     
     private var eventList: some View {
-        VStack {
+        VStack(spacing: 15) {
             ForEach(selectedDate.getDateEvents(events: testEvents)) { event in
                 EventCard(event: event)
             }
@@ -61,16 +61,16 @@ extension ListCalendarView {
         HStack {
             VStack(alignment: .leading, spacing: 5) {
                 Text(event.name)
-                    .font(.system(size: 20, weight: .medium))
+                    .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(Color.white)
                 if(event.allDay) {
                     Text("\(event.start.getFullDateString()) - \(event.end.getFullDateString())")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color.white.opacity(0.6))
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundColor(Color.white.opacity(0.7))
                 } else {
                     Text("\(event.start.getTimeString()) - \(event.end.getTimeString())")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color.white.opacity(0.6))
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundColor(Color.white.opacity(0.7))
                 }
                 
             }

@@ -33,7 +33,7 @@ extension CustomDatePicker {
     private var calendarHeading: some View {
         HStack {
             Text(date.getMonthString())
-                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .font(.system(size: 26, weight: .bold, design: .rounded))
                 .foregroundColor(color)
             if(!Calendar.current.isDate(date, equalTo: Date.now, toGranularity: .year)) {
                 Text(date.getYearString())
@@ -82,7 +82,7 @@ extension CustomDatePicker {
     }
     
     private var datesGrid: some View {
-        LazyVGrid(columns: columns) {
+        LazyVGrid(columns: columns, spacing: 5) {
             // Offset start of month to correct weekday position
             if date.getStartMonthPosition() > 0 {
                 ForEach(1 ..< date.getStartMonthPosition(), id: \.self) { _ in
@@ -97,10 +97,10 @@ extension CustomDatePicker {
     
     @ViewBuilder
     private func DateIcon(date: Date) -> some View {
-        VStack(spacing: 3) {
-            Button {
-                selectedDate = date
-            } label: {
+        Button {
+            selectedDate = date
+        } label: {
+            VStack(spacing: 6) {
                 if(Calendar.current.isDate(date, equalTo: selectedDate, toGranularity: .day)) {
                     Text(date.getDateString())
                         .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -109,7 +109,6 @@ extension CustomDatePicker {
                         .background(
                             RoundedRectangle(cornerRadius: 15)
                                 .foregroundColor(Color.white)
-                                .shadow(radius: 3)
                         )
                 } else {
                     Text(date.getDateString())
@@ -119,19 +118,18 @@ extension CustomDatePicker {
                         .background(
                             RoundedRectangle(cornerRadius: 15)
                                 .stroke(Calendar.current.isDate(date, equalTo: Date.now, toGranularity: .day) ? color : Color.clear, lineWidth: 1)
-                                .shadow(radius: 3)
                         )
                 }
-            }
-
-            HStack(spacing: 4) {
-                ForEach(getDateCalendarIcons(date: date, events: events).prefix(4), id: \.self) { color in
-                    Circle()
-                        .foregroundColor(color)
-                        .frame(width: 5, height: 5)
+                HStack(spacing: 4) {
+                    ForEach(getDateCalendarIcons(date: date, events: events).prefix(4), id: \.self) { color in
+                        Circle()
+                            .foregroundColor(color)
+                            .frame(width: 5, height: 5)
+                    }
                 }
+                .frame(width: 30, height: 10, alignment: .top)
             }
-            .frame(width: 30, height: 8, alignment: .top)
+            
         }
     }
     
@@ -153,12 +151,18 @@ struct CustomDatePicker_Previews: PreviewProvider {
         ZStack {
             Color.black.ignoresSafeArea()
             CustomDatePicker(color: Color.white , events: [
-                Event(id: "1", name: "Cambridge Trip", start: stringToDate(dateString: "2023-09-22T6:30:00+0000"), end: stringToDate(dateString: "2023-09-24T8:00:00+0000"), color: Color.purple, allDay: false),
-                Event(id: "2", name: "Football Practice", start: stringToDate(dateString: "2023-09-14T6:30:00+0000"), end: stringToDate(dateString: "2023-09-14T8:00:00+0000"), color: Color.blue, allDay: false),
-                Event(id: "3", name: "Football Practice", start: stringToDate(dateString: "2023-09-19T6:30:00+0000"), end: stringToDate(dateString: "2023-09-19T8:00:00+0000"), color: Color.red, allDay: false),
-                Event(id: "4", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"), color: Color.blue, allDay: false),
-                Event(id: "5", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"), color: Color.green, allDay: false),
-                Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-29T11:00:00+0000"), end: stringToDate(dateString: "2023-09-29T11:30:00+0000"), color: Color.red, allDay: false),
+                Event(id: "1", name: "Cambridge Trip", start: stringToDate(dateString: "2023-09-22T6:30:00+0000"), end: stringToDate(dateString: "2023-09-24T8:00:00+0000"),
+                      color: Color.purple, allDay: false),
+                Event(id: "2", name: "Football Practice", start: stringToDate(dateString: "2023-09-14T6:30:00+0000"), end: stringToDate(dateString: "2023-09-14T8:00:00+0000"),
+                      color: Color.blue, allDay: false),
+                Event(id: "3", name: "Football Practice", start: stringToDate(dateString: "2023-09-19T6:30:00+0000"), end: stringToDate(dateString: "2023-09-19T8:00:00+0000"),
+                      color: Color.red, allDay: false),
+                Event(id: "4", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"),
+                      color: Color.blue, allDay: false),
+                Event(id: "5", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"),
+                      color: Color.green, allDay: false),
+                Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-29T11:00:00+0000"), end: stringToDate(dateString: "2023-09-29T11:30:00+0000"),
+                      color: Color.red, allDay: false),
             ], selectedDate: .constant(Date.now))
         }
     }
