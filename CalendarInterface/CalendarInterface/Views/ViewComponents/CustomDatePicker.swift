@@ -50,18 +50,22 @@ extension CustomDatePicker {
     private var changeMonths: some View {
         HStack(spacing: 40) {
             Button {
-                var component = DateComponents()
-                component.month = -1
-                date = Calendar.current.date(byAdding: component, to: date)!
+                withAnimation(.default) {
+                    var component = DateComponents()
+                    component.month = -1
+                    date = Calendar.current.date(byAdding: component, to: date)!
+                }
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(color)
             }
             Button {
-                var component = DateComponents()
-                component.month = 1
-                date = Calendar.current.date(byAdding: component, to: date)!
+                withAnimation(.default) {
+                    var component = DateComponents()
+                    component.month = 1
+                    date = Calendar.current.date(byAdding: component, to: date)!
+                }
             } label: {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 18, weight: .bold))
@@ -85,7 +89,7 @@ extension CustomDatePicker {
         LazyVGrid(columns: columns, spacing: 5) {
             // Offset start of month to correct weekday position
             if date.getStartMonthPosition() > 0 {
-                ForEach(1 ..< date.getStartMonthPosition(), id: \.self) { _ in
+                ForEach(1 ..< date.getStartMonthPosition(), id: \.self) { _ in 
                     Text("")
                 }
             }

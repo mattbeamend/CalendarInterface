@@ -15,7 +15,7 @@ struct ListCalendarView: View {
         Event(id: "3", name: "Football Practice", start: stringToDate(dateString: "2023-09-19T6:30:00+0000"), end: stringToDate(dateString: "2023-09-19T8:00:00+0000"), color: Color.red, allDay: false),
         Event(id: "4", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"), color: Color.blue, allDay: false),
         Event(id: "5", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"), color: Color.green, allDay: false),
-        Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-30T11:00:00+0000"), end: stringToDate(dateString: "2023-09-30T11:30:00+0000"), color: Color.red, allDay: false)
+        Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-10-1T11:00:00+0000"), end: stringToDate(dateString: "2023-10-1T11:30:00+0000"), color: Color.red, allDay: false)
     ]
     
     @State var selectedDate: Date = Date.now
@@ -39,9 +39,24 @@ extension ListCalendarView {
     
     private var eventList: some View {
         VStack(spacing: 15) {
+            HStack(spacing: 0) {
+                Text("\(selectedDate.getFullDate()) ")
+                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                if(!Calendar.current.isDate(selectedDate, equalTo: Date.now, toGranularity: .year)) {
+                    Text(selectedDate.getYearString())
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                }
+                Spacer()
+            }
+            .frame(height: 30)
+            
             ForEach(selectedDate.getDateEvents(events: testEvents)) { event in
                 EventCard(event: event)
             }
+            if(selectedDate.getDateEvents(events: testEvents).count == 0) {
+                noEventsIcon
+            }
+            
             Spacer()
                 .frame(height: 1000)
                 .ignoresSafeArea()
@@ -56,6 +71,26 @@ extension ListCalendarView {
         )
     }
     
+    private var noEventsIcon: some View {
+        VStack(spacing: 5) {
+            Text("Nothing Planned")
+                .font(.system(size: 22, weight: .semibold, design: .rounded))
+                .foregroundColor(Color.black)
+            Button {
+                // add event
+            } label: {
+                Text("Tap here to create.")
+                    .font(.system(size: 16, weight: .medium, design: .rounded))
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(Color.gray.opacity(0.1))
+        )
+        .padding()
+    }
+    
     @ViewBuilder
     private func EventCard(event: Event) -> some View {
         HStack {
@@ -64,7 +99,7 @@ extension ListCalendarView {
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(Color.white)
                 if(event.allDay) {
-                    Text("\(event.start.getFullDateString()) - \(event.end.getFullDateString())")
+                    Text("\(event.start.getShortDate()) - \(event.end.getShortDate())")
                         .font(.system(size: 14, weight: .medium, design: .rounded))
                         .foregroundColor(Color.white.opacity(0.7))
                 } else {

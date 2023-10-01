@@ -44,15 +44,16 @@ extension Date {
     func getStartMonthPosition() -> Int {
         let start = self.startOfMonth()
         let day = Calendar.current.component(.weekday, from: start)
-        return day == 1 ? 6 : day - 1
+        return day == 1 ? 7 : day - 1
     }
     
     // Returns all events occurring on a specific date
     func getDateEvents(events: [Event]) -> [Event] {
-        let events = events.filter { event in
+        var events = events.filter { event in
             let range = event.start.startOfDay()...event.end.endOfDay()
             return range.contains(self)
         }
+        events = events.sorted(by: {$0.start.compare($1.start) == .orderedAscending})
         return events
     }
     
@@ -102,10 +103,17 @@ extension Date {
         return formatter.string(from: self)
     }
     
-    // Returns full date, e.g. "Wed 15th Sep"
-    func getFullDateString() -> String {
+    // Returns shortened date, e.g. "Wed 15 Sep"
+    func getShortDate() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "E d MMM"
+        return formatter.string(from: self)
+    }
+    
+    // Returns full date string, e.g. Wednesday 15th September 2022
+    func getFullDate() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE d MMMM"
         return formatter.string(from: self)
     }
 }
