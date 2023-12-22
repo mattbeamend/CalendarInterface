@@ -34,11 +34,11 @@ extension CustomDatePicker {
         HStack {
             Text(date.getMonthString())
                 .font(.system(size: 26, weight: .bold, design: .rounded))
-                .foregroundColor(color)
+                .foregroundStyle(color)
             if(!Calendar.current.isDate(date, equalTo: Date.now, toGranularity: .year)) {
                 Text(date.getYearString())
                     .font(.system(size: 24, weight: .regular, design: .rounded))
-                    .foregroundColor(color)
+                    .foregroundStyle(color)
             }
             Spacer()
             changeMonths
@@ -58,7 +58,7 @@ extension CustomDatePicker {
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(color)
+                    .foregroundStyle(color)
             }
             Button {
                 withAnimation(.default) {
@@ -69,7 +69,7 @@ extension CustomDatePicker {
             } label: {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(color)
+                    .foregroundStyle(color)
             }
         }
     }
@@ -79,7 +79,7 @@ extension CustomDatePicker {
             ForEach(days, id: \.self) { day in
                 Text(day)
                     .font(.system(size: 14, weight: .bold, design: .rounded))
-                    .foregroundColor(color.opacity(0.3))
+                    .foregroundStyle(color.opacity(0.3))
                     .frame(maxWidth: .infinity)
             }
         }
@@ -108,16 +108,16 @@ extension CustomDatePicker {
                 if(Calendar.current.isDate(date, equalTo: selectedDate, toGranularity: .day)) {
                     Text(date.getDateString())
                         .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(Color.black)
+                        .foregroundStyle(Color.black)
                         .frame(width: 40, height: 40)
                         .background(
                             RoundedRectangle(cornerRadius: 15)
-                                .foregroundColor(Color.white)
+                                .foregroundStyle(Color.white)
                         )
                 } else {
                     Text(date.getDateString())
                         .font(.system(size: 16, weight: .medium, design: .rounded))
-                        .foregroundColor(color)
+                        .foregroundStyle(color)
                         .frame(width: 40, height: 40)
                         .background(
                             RoundedRectangle(cornerRadius: 15)
@@ -127,7 +127,7 @@ extension CustomDatePicker {
                 HStack(spacing: 4) {
                     ForEach(getDateCalendarIcons(date: date, events: events).prefix(4), id: \.self) { color in
                         Circle()
-                            .foregroundColor(color)
+                            .foregroundStyle(color)
                             .frame(width: 5, height: 5)
                     }
                 }

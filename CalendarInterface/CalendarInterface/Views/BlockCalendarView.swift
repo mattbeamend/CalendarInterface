@@ -89,10 +89,7 @@ extension BlockCalendarView {
     }
 }
 
-func stringToDate(dateString: String) -> Date {
-    let formatter = ISO8601DateFormatter()
-    return formatter.date(from: dateString) ?? Date.now
-}
+
 
 func calculatePosition(event: Event) -> CGFloat {
     let hour = Calendar.current.component(.hour, from: event.start)
