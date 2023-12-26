@@ -116,4 +116,13 @@ extension Date {
         formatter.dateFormat = "EEEE d MMMM"
         return formatter.string(from: self)
     }
+    
+    func roundToNearestFiveMinutes() -> Date {
+        let calendar = Calendar.current
+        let minutes = calendar.component(.minute, from: self)
+        let roundedMinutes = 5 * Int(round(Double(minutes) / 5.0))
+        let roundedDate = calendar.date(bySetting: .minute, value: roundedMinutes, of: self) ?? self
+        return roundedDate
+    }
+
 }

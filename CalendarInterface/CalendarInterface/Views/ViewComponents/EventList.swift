@@ -13,7 +13,7 @@ struct EventList: View {
     var events: [Event]
     
     var body: some View {
-        VStack(spacing: 15) {
+        VStack(spacing: 10) {
             HStack(spacing: 0) {
                 Text("\(selectedDate.getFullDate()) ")
                     .foregroundStyle(Color.black)
@@ -25,9 +25,29 @@ struct EventList: View {
                 Spacer()
             }
             .frame(height: 30)
-            ForEach(selectedDate.getDateEvents(events: events)) { event in
+            .padding(.bottom, 10)
+    
+            // Display all day events
+            ForEach(selectedDate.getDateEvents(events: events).filter { $0.allDay == true }) { event in
                 EventCard(event: event)
             }
+            
+            // Show divider if all day & normal events on date
+            if(!selectedDate.getDateEvents(events: events).filter {$0.allDay == true }.isEmpty
+               && !selectedDate.getDateEvents(events: events).filter {$0.allDay == false }.isEmpty) {
+                Divider()
+                    .foregroundStyle(Color.black.opacity(1))
+                    .frame(height: 1)
+                    .padding(10)
+            }
+            
+            // Display normal events
+            ForEach(selectedDate.getDateEvents(events: events).filter { $0.allDay == false }) { event in
+                EventCard(event: event)
+            }
+            
+            
+            
             if(selectedDate.getDateEvents(events: events).count == 0) {
                 noEventsIcon
             }
@@ -35,7 +55,8 @@ struct EventList: View {
                 .frame(height: 1000)
                 .ignoresSafeArea()
         }
-        .padding()
+        .padding(.vertical)
+        .padding(.horizontal, 10)
         .frame(maxWidth: .infinity)
         .background(
             Rectangle()
@@ -54,7 +75,7 @@ extension EventList {
                 .font(.system(size: 22, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
             NavigationLink {
-                CreateEventView(selectedDate: selectedDate)
+                CreateEventView(startTime: selectedDate)
             } label: {
                 Text("Tap here to create.")
                     .font(.system(size: 16, weight: .medium, design: .rounded))
@@ -73,12 +94,10 @@ extension EventList {
         HStack {
             VStack(alignment: .leading, spacing: 5) {
                 Text(event.name)
-                    .font(.system(size: 18, weight: .medium, design: .rounded))
+                    .font(.system(size: 16, weight: .medium, design: .rounded))
                     .foregroundStyle(Color.white)
                 if(event.allDay) {
-                    Text("\(event.start.getShortDate()) - \(event.end.getShortDate())")
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.white.opacity(0.7))
+                    
                 } else {
                     Text("\(event.start.getTimeString()) - \(event.end.getTimeString())")
                         .font(.system(size: 14, weight: .medium, design: .rounded))
@@ -94,7 +113,8 @@ extension EventList {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 15)
-                .foregroundStyle(event.end < Date.now ? Color.white.opacity(0.3) : Color.clear)
+                .foregroundStyle((event.allDay && (event.end.endOfDay() < Date.now)) || (!event.allDay && (event.end < Date.now)) ? Color.white.opacity(0.5) : Color.clear)
+                
         )
         .frame(maxWidth: .infinity)
        
