@@ -16,6 +16,7 @@
 		662161692AC5D09200347853 /* BlockCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662161682AC5D09200347853 /* BlockCalendarView.swift */; };
 		6621616E2AC627D400347853 /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621616D2AC627D400347853 /* CustomDatePicker.swift */; };
 		663210C52B360794003D7C2C /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663210C42B360794003D7C2C /* CreateEventView.swift */; };
+		663210C72B3CC200003D7C2C /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663210C62B3CC200003D7C2C /* Color.swift */; };
 		663B4CE72AC8283400B25826 /* ListCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663B4CE62AC8283400B25826 /* ListCalendarView.swift */; };
 		663B4CEB2AC82B2600B25826 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663B4CEA2AC82B2600B25826 /* RoundedCorner.swift */; };
 		663B4CED2AC82B5200B25826 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663B4CEC2AC82B5200B25826 /* Date.swift */; };
@@ -45,6 +46,7 @@
 		662161682AC5D09200347853 /* BlockCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCalendarView.swift; sourceTree = "<group>"; };
 		6621616D2AC627D400347853 /* CustomDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
 		663210C42B360794003D7C2C /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
+		663210C62B3CC200003D7C2C /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		663B4CE62AC8283400B25826 /* ListCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCalendarView.swift; sourceTree = "<group>"; };
 		663B4CEA2AC82B2600B25826 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		663B4CEC2AC82B5200B25826 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 			children = (
 				663B4CEA2AC82B2600B25826 /* RoundedCorner.swift */,
 				663B4CEC2AC82B5200B25826 /* Date.swift */,
+				663210C62B3CC200003D7C2C /* Color.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				662161692AC5D09200347853 /* BlockCalendarView.swift in Sources */,
 				663210C52B360794003D7C2C /* CreateEventView.swift in Sources */,
 				662161672AC5D08100347853 /* CalendarViewModel.swift in Sources */,
+				663210C72B3CC200003D7C2C /* Color.swift in Sources */,
 				662161592AC5D05100347853 /* ContentView.swift in Sources */,
 				663B4CED2AC82B5200B25826 /* Date.swift in Sources */,
 				662161652AC5D06000347853 /* Event.swift in Sources */,

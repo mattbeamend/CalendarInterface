@@ -9,15 +9,38 @@ import SwiftUI
 
 struct ListCalendarView: View {
     
-    let testEvents = [
-        Event(id: "1", name: "Cambridge Trip", start: stringToDate(dateString: "2023-12-24T8:30:00+0000"), end: stringToDate(dateString: "2023-12-26T3:00:00+0000"), color: Color.purple, allDay: true),
-        Event(id: "10", name: "Boxing Day", start: stringToDate(dateString: "2023-12-26T8:30:00+0000"), end: stringToDate(dateString: "2023-12-26T3:00:00+0000"), color: Color.orange, allDay: true),
-        Event(id: "2", name: "Football Practice", start: stringToDate(dateString: "2023-09-14T6:30:00+0000"), end: stringToDate(dateString: "2023-09-14T8:00:00+0000"), color: Color.blue, allDay: false),
-        Event(id: "5", name: "Sprint Meeting", start: stringToDate(dateString: "2023-12-26T8:00:00+0000"), end: stringToDate(dateString: "2023-12-26T10:00:00+0000"), color: Color.green, allDay: false),
-        Event(id: "3", name: "Football Practice", start: stringToDate(dateString: "2023-09-19T6:30:00+0000"), end: stringToDate(dateString: "2023-09-19T8:00:00+0000"), color: Color.red, allDay: false),
-        Event(id: "4", name: "Football Practice", start: stringToDate(dateString: "2023-12-26T6:30:00+0000"), end: stringToDate(dateString: "2023-12-26T8:00:00+0000"), color: Color.blue, allDay: false),
-        Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-12-27T11:00:00+0000"), end: stringToDate(dateString: "2023-12-27T11:30:00+0000"), color: Color.red, allDay: false)
+    
+    @State var testEvents = [
+        Event(id: "1", name: "Cambridge Trip", start: stringToDate(dateString: "2023-12-24T8:30:00+0000"), end: stringToDate(dateString: "2023-12-26T3:00:00+0000"), color: Color.purple.toHex() ?? "#000000", allDay: true),
+        Event(id: "10", name: "Boxing Day", start: stringToDate(dateString: "2023-12-26T8:30:00+0000"), end: stringToDate(dateString: "2023-12-26T3:00:00+0000"), color: Color.orange.toHex() ?? "#000000", allDay: true),
+        Event(id: "2", name: "Football Practice", start: stringToDate(dateString: "2023-09-14T6:30:00+0000"), end: stringToDate(dateString: "2023-09-14T8:00:00+0000"), color: Color.blue.toHex() ?? "#000000", allDay: false),
+        Event(id: "5", name: "Sprint Meeting", start: stringToDate(dateString: "2023-12-26T8:00:00+0000"), end: stringToDate(dateString: "2023-12-26T10:00:00+0000"), color: Color.green.toHex() ?? "#000000", allDay: false),
+        Event(id: "3", name: "Football Practice", start: stringToDate(dateString: "2023-09-19T6:30:00+0000"), end: stringToDate(dateString: "2023-09-19T8:00:00+0000"), color: Color.red.toHex() ?? "#000000", allDay: false),
+        Event(id: "4", name: "Football Practice", start: stringToDate(dateString: "2023-12-26T6:30:00+0000"), end: stringToDate(dateString: "2023-12-26T8:00:00+0000"), color: Color.blue.toHex() ?? "#000000", allDay: false),
+        Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-12-28T11:00:00+0000"), end: stringToDate(dateString: "2023-12-28T11:30:00+0000"), color: Color.red.toHex() ?? "#000000", allDay: false)
     ]
+    
+    @State var events: [Event] = []
+    
+    
+//    init() {
+//        if let savedCustomObjectsData = UserDefaults.standard.object(forKey: "events") {
+//            let decoder = JSONDecoder()
+//            if let savedCustomObjects = try? decoder.decode([Event].self, from: savedCustomObjectsData as! Data) {
+//                events = savedCustomObjects
+//            }
+//        }
+//    }
+    init() {
+        if let savedEventsData = UserDefaults.standard.data(forKey: "events") {
+            let decoder = JSONDecoder()
+            if let savedEvents = try? decoder.decode([Event].self, from: savedEventsData) {
+                print(savedEvents)
+                events = savedEvents
+            }
+        }
+    }
+    
     
     @State var selectedDate: Date = Date.now
     
@@ -27,10 +50,10 @@ struct ListCalendarView: View {
                 Color.black.opacity(0.9).ignoresSafeArea()
                 ScrollView(.vertical) {
                     VStack(spacing: 5) {
-                        CustomDatePicker(color: Color.white, events: testEvents, selectedDate: $selectedDate)
+                        CustomDatePicker(color: Color.white, events: events, selectedDate: $selectedDate)
                             .padding(10)
                         Spacer().frame(height: 3)
-                        EventList(selectedDate: selectedDate, events: testEvents)
+                        EventList(selectedDate: selectedDate, events: $events)
                     }
                 }
                 VStack {
@@ -43,12 +66,20 @@ struct ListCalendarView: View {
                 }
                 
             }
+            .onAppear(perform: {
+                if let savedEventsData = UserDefaults.standard.data(forKey: "events") {
+                    let decoder = JSONDecoder()
+                    if let savedEvents = try? decoder.decode([Event].self, from: savedEventsData) {
+                        events = savedEvents
+                    }
+                }
+            })
         }
     }
     
     private var addEventButton: some View {
         NavigationLink {
-            CreateEventView(startTime: selectedDate)
+            CreateEventView(events: $events, startTime: selectedDate)
         } label: {
             Image(systemName: "plus")
                 .font(.system(size: 26, weight: .semibold))

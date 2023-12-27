@@ -13,11 +13,11 @@ struct BlockCalendarView: View {
     // Swift will then automatically convert back to local timezone when Date object is created.
     
     // Test data must also use UTC timezone
-    let events = [
-        Event(id: "1", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"), color: Color.blue, allDay: false),
-        Event(id: "2", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"), color: Color.green, allDay: false),
-        Event(id: "3", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-28T11:00:00+0000"), end: stringToDate(dateString: "2023-09-28T11:30:00+0000"), color: Color.red, allDay: false)
-    ]
+//    let events = [
+//        Event(id: "1", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"), color: Color.blue, allDay: false),
+//        Event(id: "2", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"), color: Color.green, allDay: false),
+//        Event(id: "3", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-28T11:00:00+0000"), end: stringToDate(dateString: "2023-09-28T11:30:00+0000"), color: Color.red, allDay: false)
+//    ]
     
     var body: some View {
         ScrollView {
@@ -26,11 +26,11 @@ struct BlockCalendarView: View {
                 HStack {
                     Spacer().frame(width: 55)
                     VStack {
-                        ZStack(alignment:.top) {
-                            EventBlock(event: events.first!)
-                            EventBlock(event: events[1])
-                            EventBlock(event: events[2])
-                        }
+//                        ZStack(alignment:.top) {
+//                            EventBlock(event: events.first!)
+//                            EventBlock(event: events[1])
+//                            EventBlock(event: events[2])
+//                        }
                         Spacer()
                     }
                     .offset(y: 10)
@@ -67,26 +67,26 @@ extension BlockCalendarView {
         }
     }
     
-    @ViewBuilder
-    private func EventBlock(event: Event) -> some View {
-        VStack(alignment: .leading) {
-            if(calculateDuration(event: event) >= 30) {
-                Text(event.name)
-                    .font(.system(size: 13))
-                    .foregroundColor(Color.white)
-                    .padding(10)
-            }
-            Spacer()
-        }
-        .frame(height: calculateDuration(event: event), alignment: .leading)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 5)
-                .foregroundColor(event.color)
-                .padding(1)
-        )
-        .offset(y: calculatePosition(event: event))
-    }
+//    @ViewBuilder
+//    private func EventBlock(event: Event) -> some View {
+//        VStack(alignment: .leading) {
+//            if(calculateDuration(event: event) >= 30) {
+//                Text(event.name)
+//                    .font(.system(size: 13))
+//                    .foregroundColor(Color.white)
+//                    .padding(10)
+//            }
+//            Spacer()
+//        }
+//        .frame(height: calculateDuration(event: event), alignment: .leading)
+//        .frame(maxWidth: .infinity, alignment: .leading)
+//        .background(
+//            RoundedRectangle(cornerRadius: 5)
+//                .foregroundColor(event.color)
+//                .padding(1)
+//        )
+//        .offset(y: calculatePosition(event: event))
+//    }
 }
 
 

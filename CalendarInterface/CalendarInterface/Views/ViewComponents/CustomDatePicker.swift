@@ -142,32 +142,32 @@ extension CustomDatePicker {
         let events = date.getDateEvents(events: events)
         var colours = [Color]()
         for event in events {
-            colours.contains(event.color) ? nil : colours.append(event.color)
+            colours.contains(Color(hex: event.color ) ?? Color.blue) ? nil : colours.append(Color(hex: event.color ) ?? Color.blue)
         }
         return colours
     }
 }
 
 
-
-struct CustomDatePicker_Previews: PreviewProvider {
-    static var previews: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            CustomDatePicker(color: Color.white , events: [
-                Event(id: "1", name: "Cambridge Trip", start: stringToDate(dateString: "2023-09-22T6:30:00+0000"), end: stringToDate(dateString: "2023-09-24T8:00:00+0000"),
-                      color: Color.purple, allDay: false),
-                Event(id: "2", name: "Football Practice", start: stringToDate(dateString: "2023-09-14T6:30:00+0000"), end: stringToDate(dateString: "2023-09-14T8:00:00+0000"),
-                      color: Color.blue, allDay: false),
-                Event(id: "3", name: "Football Practice", start: stringToDate(dateString: "2023-09-19T6:30:00+0000"), end: stringToDate(dateString: "2023-09-19T8:00:00+0000"),
-                      color: Color.red, allDay: false),
-                Event(id: "4", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"),
-                      color: Color.blue, allDay: false),
-                Event(id: "5", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"),
-                      color: Color.green, allDay: false),
-                Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-29T11:00:00+0000"), end: stringToDate(dateString: "2023-09-29T11:30:00+0000"),
-                      color: Color.red, allDay: false),
-            ], selectedDate: .constant(Date.now))
-        }
-    }
-}
+//
+//struct CustomDatePicker_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ZStack {
+//            Color.black.ignoresSafeArea()
+//            CustomDatePicker(color: Color.white , events: [
+//                Event(id: "1", name: "Cambridge Trip", start: stringToDate(dateString: "2023-09-22T6:30:00+0000"), end: stringToDate(dateString: "2023-09-24T8:00:00+0000"),
+//                      color: Color.purple, allDay: false),
+//                Event(id: "2", name: "Football Practice", start: stringToDate(dateString: "2023-09-14T6:30:00+0000"), end: stringToDate(dateString: "2023-09-14T8:00:00+0000"),
+//                      color: Color.blue, allDay: false),
+//                Event(id: "3", name: "Football Practice", start: stringToDate(dateString: "2023-09-19T6:30:00+0000"), end: stringToDate(dateString: "2023-09-19T8:00:00+0000"),
+//                      color: Color.red, allDay: false),
+//                Event(id: "4", name: "Football Practice", start: stringToDate(dateString: "2023-09-28T6:30:00+0000"), end: stringToDate(dateString: "2023-09-28T8:00:00+0000"),
+//                      color: Color.blue, allDay: false),
+//                Event(id: "5", name: "Sprint Meeting", start: stringToDate(dateString: "2023-09-28T8:00:00+0000"), end: stringToDate(dateString: "2023-09-28T10:00:00+0000"),
+//                      color: Color.green, allDay: false),
+//                Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-09-29T11:00:00+0000"), end: stringToDate(dateString: "2023-09-29T11:30:00+0000"),
+//                      color: Color.red, allDay: false),
+//            ], selectedDate: .constant(Date.now))
+//        }
+//    }
+//}

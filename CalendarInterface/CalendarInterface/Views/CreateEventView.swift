@@ -10,16 +10,20 @@ import SwiftUI
 
 struct CreateEventView: View {
     
+    @Binding var events: [Event]
+    
     @Environment(\.presentationMode) var presentationMode
     @FocusState private var focused: Bool?
     
     @State var showSelectStart: Bool = false
     @State var showSelectFinish: Bool = false
+    @State var showEventColor: Bool = false
     
     @State var startTime: Date
     @State var finishTime: Date = Date.now
     @State var isAllDay: Bool = false
     @State var eventTitle: String = ""
+    @State var eventColor: Color = Color.accentColor
     
     var body: some View {
         VStack {
@@ -29,11 +33,10 @@ struct CreateEventView: View {
                     eventTextField
                     allDayToggle
                     datePicker
+                    colorPicker
                 }
             }
-            .onTapGesture {
-                hideKeyboard()
-            }
+            
         }
         .navigationBarBackButtonHidden(true)
         .onAppear(perform: {
@@ -41,7 +44,7 @@ struct CreateEventView: View {
             let dateMinutes = Calendar.current.dateComponents([.hour, .minute], from: Date.now)
             self.startTime = Calendar.current.date(bySettingHour: dateMinutes.hour ?? 0, minute: dateMinutes.minute ?? 0, second: 0, of: startTime)?.roundToNearestFiveMinutes() ?? startTime
             // set default finish time to 5 minutes after start time
-            self.finishTime = Calendar.current.date(byAdding: .minute, value: 5, to: startTime) ?? Date.now
+            self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
         })
     }
 }
@@ -64,8 +67,7 @@ extension CreateEventView {
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
             Spacer()
             Button(action: {
-                print(self.startTime)
-                print(self.finishTime)
+                self.createEvent()
                 presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text("Done")
@@ -106,7 +108,7 @@ extension CreateEventView {
     private var allDayToggle: some View {
         HStack {
             Text("Date")
-                .font(.system(size: 16, weight: .medium))
+                .font(.system(size: 16, weight: .medium, design: .rounded))
                 .foregroundStyle(Color.black.opacity(0.5))
             Spacer()
             Toggle(isOn: $isAllDay) {
@@ -135,8 +137,46 @@ extension CreateEventView {
         }
         .padding(10)
     }
+    
+    private var colorPicker: some View {
+        ColorPicker(selection: $eventColor, label: {
+            Text("Event Color")
+                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                .foregroundStyle(Color.black)
+        })
+        .padding(10)
+        .padding(.top, 15)
+        .padding(.trailing)
+    }
+    
+    private func createEvent() {
+        // TODO: need to santise inputs, check for missing information
+        
+        var event = Event(id: UUID().uuidString, name: eventTitle, start: startTime, end: finishTime, color: eventColor.toHex() ?? "#000000", allDay: isAllDay)
+        if(event.start > event.end) {
+            event.end = event.start
+        }
+        print(event)
+        events.append(event)
+//        do {
+//            // 1
+//            let encodedData = try JSONEncoder().encode(events)
+//            let userDefaults = UserDefaults.standard
+//            // 2
+//            userDefaults.set(encodedData, forKey: "events")
+//
+//        } catch {
+//            print("failed to save to user defaults")
+//        }
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(events) {
+            UserDefaults.standard.set(encoded, forKey: "events")
+        }
+    }
+    
 }
 
-#Preview {
-    CreateEventView(startTime: stringToDate(dateString: "2023-09-24T8:00:00+0000"))
-}
+
+//#Preview {
+//    CreateEventView(events: [], startTime: stringToDate(dateString: "2023-09-24T8:00:00+0000"))
+//}
