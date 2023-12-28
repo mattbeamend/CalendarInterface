@@ -91,47 +91,50 @@ extension EventList {
     
     @ViewBuilder
     private func EventCard(event: Event) -> some View {
-        HStack(spacing: 15) {
-            Rectangle()
-                .frame(width: 10)
-                .cornerRadius(10, corners: [.topLeft, .bottomLeft])
-                .foregroundStyle(Color(hex: event.color) ?? Color.blue)
+        NavigationLink {
+            EventDetailView(events: events, event: event)
+        } label: {
+            HStack(spacing: 15) {
+                Rectangle()
+                    .frame(width: 10)
+                    .cornerRadius(10, corners: [.topLeft, .bottomLeft])
+                    .foregroundStyle(Color(hex: event.color) ?? Color.blue)
 
-            VStack(alignment: .leading, spacing: 5) {
-                Text(event.name)
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color.black)
-                if(event.allDay) {
-//                    if(event.start.getDateString() == event.end.getDateString()) {
-//                        Text("\(event.start.getShortDate())")
-//                            .font(.system(size: 14, weight: .medium, design: .rounded))
-//                            .foregroundStyle(Color.white.opacity(0.7))
-//                    } else {
-//                        Text("\(event.start.getShortDate()) - \(event.end.getShortDate())")
-//                            .font(.system(size: 14, weight: .medium, design: .rounded))
-//                            .foregroundStyle(Color.white.opacity(0.7))
-//                    }
-                    
-                } else {
-                    Text("\(event.start.getTimeString()) - \(event.end.getTimeString())")
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.black.opacity(0.7))
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(event.name)
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.black)
+                    if(event.allDay) {
+    //                    if(event.start.getDateString() == event.end.getDateString()) {
+    //                        Text("\(event.start.getShortDate())")
+    //                            .font(.system(size: 14, weight: .medium, design: .rounded))
+    //                            .foregroundStyle(Color.white.opacity(0.7))
+    //                    } else {
+    //                        Text("\(event.start.getShortDate()) - \(event.end.getShortDate())")
+    //                            .font(.system(size: 14, weight: .medium, design: .rounded))
+    //                            .foregroundStyle(Color.white.opacity(0.7))
+    //                    }
+                        
+                    } else {
+                        Text("\(event.start.getTimeString()) - \(event.end.getTimeString())")
+                            .font(.system(size: 14, weight: .medium, design: .rounded))
+                            .foregroundStyle(Color.black.opacity(0.7))
+                    }
                 }
+                .padding(.vertical)
+                Spacer()
             }
-            .padding(.vertical)
-            Spacer()
+            .background(
+                RoundedRectangle(cornerRadius: 5)
+                    .foregroundStyle(Color(hex: event.color)?.opacity(0.2) ?? Color.blue.opacity(0.2))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .foregroundStyle((event.allDay && (event.end.endOfDay() < Date.now)) || (!event.allDay && (event.end < Date.now)) ? Color.white.opacity(0.4) : Color.clear)
+                    
+            )
+            .frame(maxWidth: .infinity)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 5)
-                .foregroundStyle(Color(hex: event.color)?.opacity(0.2) ?? Color.blue.opacity(0.2))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 5)
-                .foregroundStyle((event.allDay && (event.end.endOfDay() < Date.now)) || (!event.allDay && (event.end < Date.now)) ? Color.white.opacity(0.4) : Color.clear)
-                
-        )
-        .frame(maxWidth: .infinity)
-       
     }
 }
 

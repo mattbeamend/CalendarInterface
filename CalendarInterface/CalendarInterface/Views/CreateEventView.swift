@@ -151,23 +151,13 @@ extension CreateEventView {
     
     private func createEvent() {
         // TODO: need to santise inputs, check for missing information
-        
         var event = Event(id: UUID().uuidString, name: eventTitle, start: startTime, end: finishTime, color: eventColor.toHex() ?? "#000000", allDay: isAllDay)
+        if(event.name.isEmpty) { return }
         if(event.start > event.end) {
             event.end = event.start
         }
         print(event)
         events.append(event)
-//        do {
-//            // 1
-//            let encodedData = try JSONEncoder().encode(events)
-//            let userDefaults = UserDefaults.standard
-//            // 2
-//            userDefaults.set(encodedData, forKey: "events")
-//
-//        } catch {
-//            print("failed to save to user defaults")
-//        }
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(events) {
             UserDefaults.standard.set(encoded, forKey: "events")
