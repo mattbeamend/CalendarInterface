@@ -22,7 +22,12 @@ struct CreateEventView: View {
     @State var showSelectFinish: Bool = false
     @State var showEventColor: Bool = false
     
-    @State var startTime: Date
+    @State var startTime: Date {
+        didSet {
+            print("updated")
+            self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
+        }
+    }
     @State var finishTime: Date = Date.now
     @State var isAllDay: Bool = false
     @State var eventTitle: String = ""
@@ -57,11 +62,12 @@ struct CreateEventView: View {
                 // change start time to have same hour/minutes as users current time and round to nearest 5 minutes
                 let dateMinutes = Calendar.current.dateComponents([.hour, .minute], from: Date.now)
                 self.startTime = Calendar.current.date(bySettingHour: dateMinutes.hour ?? 0, minute: dateMinutes.minute ?? 0, second: 0, of: startTime)?.roundToNearestFiveMinutes() ?? startTime
-                // set default finish time to 5 minutes after start time
-                self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
                 initHasRun = true
             }
         })
+        .onChange(of: startTime) { newValue in
+            self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
+        }
     }
 }
 

@@ -15,6 +15,14 @@ struct ContentView: View {
     
     init() {
         UIDatePicker.appearance().minuteInterval = 5
+        // if first loaded, add personal calendar to user defaults
+        let encoder = JSONEncoder()
+        let initCalendars = [GroupCalendar(id: "1", name: "Personal", color: "#FF0000")]
+        if((UserDefaults.standard.data(forKey: "calendars") == nil)) {
+            if let encoded = try? encoder.encode(initCalendars) {
+                UserDefaults.standard.set(encoded, forKey: "calendars")
+            }
+        }
     }
     
     
@@ -50,7 +58,7 @@ struct ContentView: View {
                 if let savedEventsData = UserDefaults.standard.data(forKey: "calendars") {
                     let decoder = JSONDecoder()
                     if let savedCalendars = try? decoder.decode([GroupCalendar].self, from: savedEventsData) {
-                        calendars = savedCalendars
+                        calendars =  savedCalendars
                     }
                 }
             })

@@ -74,7 +74,7 @@ extension GroupCalendarListingView {
     @ViewBuilder
     private func CalendarCard(calendar: GroupCalendar) -> some View {
         HStack {
-            if(editMode) {
+            if(editMode && (calendar.id != "1")) {
                 Button(action: {
                     // delete calendar from user defaults
                     if let index = calendars.firstIndex(where: { $0.id == calendar.id}) {

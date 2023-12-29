@@ -342,8 +342,9 @@ extension EventDetailView {
                     RoundedRectangle(cornerRadius: 10)
                         .foregroundStyle(Color.red)
                 )
-                .padding(30)
+                
         })
+        .padding(30)
     }
 }
 
