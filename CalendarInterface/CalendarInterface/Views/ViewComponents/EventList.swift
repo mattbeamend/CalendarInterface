@@ -11,6 +11,9 @@ struct EventList: View {
     
     var selectedDate: Date
     @Binding var events: [Event]
+    @Binding var calendars: [GroupCalendar]
+    
+    @State var personalCalendar: GroupCalendar = GroupCalendar(id: "1", name: "Personal", color: "#FF0000")
     
     var body: some View {
         VStack(spacing: 7) {
@@ -92,7 +95,7 @@ extension EventList {
     @ViewBuilder
     private func EventCard(event: Event) -> some View {
         NavigationLink {
-            EventDetailView(events: events, event: event)
+            EventDetailView(events: events, event: event, calendar: calendars.first(where: { $0.id == event.calendarId }) ?? personalCalendar)
         } label: {
             HStack(spacing: 15) {
                 Rectangle()

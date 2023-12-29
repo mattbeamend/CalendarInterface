@@ -15,12 +15,17 @@ struct EventDetailView: View {
     
     @State var events: [Event]
     @State var event: Event
+    @State var calendar: GroupCalendar
     
     @State var editEventName: String = ""
     @State var editEventStart: Date = Date.now
     @State var editEventEnd: Date = Date.now
-    @State var editEventColor: Color = Color.accentColor
     @State var editEventAllDay: Bool = false
+    @State var editEventColor: Color = Color.accentColor
+    @State var editEventCalendar: GroupCalendar = GroupCalendar(id: "1", name: "Personal", color: "#FF0000")
+
+    
+    
     
     
     var body: some View {
@@ -33,6 +38,9 @@ struct EventDetailView: View {
                     editName
                     editAllDay
                     editTimings
+                    Divider().padding(10)
+                    editCalendar
+                    Divider().padding(10)
                     editColor
                     deleteEventButton
                     Spacer()
@@ -41,6 +49,8 @@ struct EventDetailView: View {
                 VStack {
                     eventName
                     timings
+                    Divider().frame(height: 10).padding(10)
+                    eventCalendar
                     Spacer()
                 }
                 .highPriorityGesture(DragGesture().onEnded({ gesture in
@@ -97,9 +107,14 @@ extension EventDetailView {
                         event.color = editEventColor.toHex() ?? "#00000"
                         event.allDay = editEventAllDay
                         editMode = false
+                        calendar = editEventCalendar
+                        event.calendarId = editEventCalendar.id
+                        
+                        // find event in event list and update values
                         if let index = events.firstIndex(where: { $0.id == event.id}) {
                             events[index] = event
                         }
+                        // encode and store to user defaults
                         let encoder = JSONEncoder()
                         if let encoded = try? encoder.encode(events) {
                             UserDefaults.standard.set(encoded, forKey: "events")
@@ -121,6 +136,7 @@ extension EventDetailView {
                         editEventColor = Color(hex: event.color) ?? Color.accentColor
                         editEventAllDay = event.allDay
                         editMode = true
+                        editEventCalendar = calendar
                     }
                 }, label: {
                     Text("Edit")
@@ -175,7 +191,7 @@ extension EventDetailView {
                         .font(.system(size: 18, weight: .medium))
                 }
             }
-            Divider().frame(height: 40)
+            Spacer().frame(height: 20)
             Text("To")
                 .font(.system(size: 14, weight: .regular))
                 .foregroundStyle(Color.black.opacity(0.5))
@@ -193,6 +209,31 @@ extension EventDetailView {
         .padding(15)
     }
     
+    private var eventCalendar: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            Text("Calendar")
+                .font(.system(size: 14, weight: .regular))
+                .foregroundStyle(Color.black.opacity(0.5))
+            HStack {
+                Circle()
+                    .foregroundStyle(Color(hex: calendar.color) ?? Color.accentColor)
+                    .frame(width: 20, height: 20)
+                Text(calendar.name)
+                    .font(.system(size: 14, weight: .medium))
+                Spacer()
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.black.opacity(0.2))
+            )
+        }
+        .padding(10)
+    }
+    
+    
+    // EDIT VIEW COMPONENTS
+    
     private var editName: some View {
         TextField("Event name", text: $editEventName)
             .font(.system(size: 18, weight: .regular, design: .rounded))
@@ -203,17 +244,6 @@ extension EventDetailView {
                     .stroke(Color.gray.opacity(0.4))
             )
             .padding(10)
-    }
-    
-    private var editColor: some View {
-        ColorPicker(selection: $editEventColor, label: {
-            Text("Event Color")
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                .foregroundStyle(Color.black)
-        })
-        .padding(10)
-        .padding(.top, 15)
-        .padding(.trailing)
     }
     
     private var editAllDay: some View {
@@ -239,7 +269,6 @@ extension EventDetailView {
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
                 .frame(height: 50)
-            Divider()
             DatePicker("Finish", selection: $editEventEnd, in: (Calendar.current.date(byAdding: .minute, value: 5, to: editEventStart) ?? Date.now)..., displayedComponents: !editEventAllDay ? [.hourAndMinute, .date] : .date)
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
@@ -248,6 +277,49 @@ extension EventDetailView {
         }
         .padding(10)
     }
+    
+    private var editCalendar: some View {
+        VStack(alignment: .leading) {
+            Text("Calendar")
+                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .foregroundStyle(Color.black.opacity(0.5))
+                .padding(.bottom, 15)
+            NavigationLink {
+                CalendarListView(selectedCalendar: $editEventCalendar, selectedColor: $editEventColor)
+            } label: {
+                HStack(spacing: 5) {
+                    Text("Select Calendar")
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundStyle(Color.black)
+                    Spacer()
+                    Circle()
+                        .frame(width: 10, height: 10)
+                        .foregroundStyle(Color(hex: editEventCalendar.color) ?? Color.accentColor)
+                    Text(editEventCalendar.name)
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.black)
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray.opacity(0.4))
+                )
+            }
+        }
+        .padding(10)
+    }
+    
+    private var editColor: some View {
+        ColorPicker(selection: $editEventColor, label: {
+            Text("Event Color")
+                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                .foregroundStyle(Color.black)
+        })
+        .padding(10)
+        .padding(.trailing)
+    }
+    
+                
     
     private var deleteEventButton: some View {
         Button(action: {

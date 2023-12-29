@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CreateEventView: View {
     
+    
     @Binding var events: [Event]
     
     @Environment(\.presentationMode) var presentationMode
@@ -23,7 +24,9 @@ struct CreateEventView: View {
     @State var finishTime: Date = Date.now
     @State var isAllDay: Bool = false
     @State var eventTitle: String = ""
-    @State var eventColor: Color = Color.accentColor
+    @State var eventColor: Color = Color(hex: "#FF0000") ?? Color.accentColor
+    
+    @State var selectedCalendar: GroupCalendar = GroupCalendar(id: "1", name: "Personal", color: "#FF0000")
     
     var body: some View {
         VStack {
@@ -33,6 +36,9 @@ struct CreateEventView: View {
                     eventTextField
                     allDayToggle
                     datePicker
+                    Divider().padding(10)
+                    calendarSelector
+                    Divider().padding(10)
                     colorPicker
                 }
                 .highPriorityGesture(DragGesture().onEnded({ gesture in
@@ -133,7 +139,7 @@ extension CreateEventView {
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
                 .frame(height: 50)
-            Divider()
+        
             DatePicker("Finish", selection: $finishTime, in: (Calendar.current.date(byAdding: .minute, value: 5, to: startTime) ?? Date.now)..., displayedComponents: !isAllDay ? [.hourAndMinute, .date] : .date)
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
@@ -150,13 +156,44 @@ extension CreateEventView {
                 .foregroundStyle(Color.black)
         })
         .padding(10)
-        .padding(.top, 15)
         .padding(.trailing)
     }
     
+    private var calendarSelector: some View {
+        VStack(alignment: .leading) {
+            Text("Calendar")
+                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .foregroundStyle(Color.black.opacity(0.5))
+                .padding(.bottom, 15)
+            NavigationLink {
+                CalendarListView(selectedCalendar: $selectedCalendar, selectedColor: $eventColor)
+            } label: {
+                HStack(spacing: 5) {
+                    Text("Select Calendar")
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundStyle(Color.black)
+                    Spacer()
+                    Circle()
+                        .frame(width: 10, height: 10)
+                        .foregroundStyle(Color(hex: selectedCalendar.color) ?? Color.accentColor)
+                    Text(selectedCalendar.name)
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.black)
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray.opacity(0.4))
+                )
+            }
+        }
+        .padding(10)
+    }
+    
+    
     private func createEvent() {
         // TODO: need to santise inputs, check for missing information
-        var event = Event(id: UUID().uuidString, name: eventTitle, start: startTime, end: finishTime, color: eventColor.toHex() ?? "#000000", allDay: isAllDay)
+        var event = Event(id: UUID().uuidString, name: eventTitle, start: startTime, end: finishTime, color: eventColor.toHex() ?? "#000000", allDay: isAllDay, calendarId: selectedCalendar.id)
         if(event.name.isEmpty) { return }
         if(event.start > event.end) {
             event.end = event.start
@@ -170,6 +207,84 @@ extension CreateEventView {
     }
     
 }
+
+struct CalendarListView: View {
+    
+    // need to fetch the calendars the user is a member of
+    @State var testCalendars: [GroupCalendar] = [
+        GroupCalendar(id: "1", name: "Personal", color: "#FF0000"),
+        GroupCalendar(id: "2", name: "Work", color: "#FFFF00"),
+        GroupCalendar(id: "3", name: "Stoke Poges Tennis", color: "#0000ff"),
+    ]
+    
+    @Environment(\.presentationMode) var presentationMode
+    @Binding var selectedCalendar: GroupCalendar
+    @Binding var selectedColor: Color
+    
+    var body: some View {
+        VStack {
+            heading
+            List(testCalendars) { calendar in
+                Button {
+                    selectedCalendar = calendar
+                    selectedColor = Color(hex: calendar.color) ?? Color.accentColor
+                } label: {
+                    HStack(spacing: 10) {
+                        Circle()
+                            .frame(width: 10, height: 10)
+                            .foregroundStyle(Color(hex: calendar.color) ?? Color.accentColor)
+                        Text(calendar.name)
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(Color.black)
+                        Spacer()
+                        if(selectedCalendar == calendar) {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundStyle(Color.black)
+                        }
+                    }
+                }
+            }
+            .listStyle(.grouped)
+        }
+        .navigationBarBackButtonHidden()
+        .highPriorityGesture(DragGesture().onEnded({ gesture in
+            if gesture.translation.width > 0 { // swipe back (right)
+                presentationMode.wrappedValue.dismiss()
+            }
+        }))
+    }
+    
+    private var heading: some View {
+        HStack {
+            Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .foregroundStyle(Color.white)
+            })
+            .frame(width: 50, alignment: .leading)
+            Spacer()
+            Text("Your Calendars")
+                .foregroundStyle(Color.white)
+                .font(.system(size: 18, weight: .semibold, design: .rounded))
+            Spacer()
+            Spacer()
+            .frame(width: 50, alignment: .trailing)
+        }
+        .padding(15)
+        .padding(.bottom, 5)
+        .background(
+            Rectangle()
+                .foregroundStyle(Color.black.opacity(0.9))
+                .ignoresSafeArea()
+        )
+        
+    }
+}
+
+
 
 
 //#Preview {

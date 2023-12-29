@@ -15,4 +15,5 @@ struct Event: Identifiable, Hashable, Codable {
     var end: Date
     var color: String
     var allDay: Bool
+    var calendarId: String
 }
