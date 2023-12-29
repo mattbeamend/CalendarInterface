@@ -10,6 +10,8 @@ import SwiftUI
 
 struct EventDetailView: View {
     
+    @Binding var calendars: [GroupCalendar]
+    
     @Environment(\.presentationMode) var presentationMode
     @State var editMode: Bool = false
     
@@ -285,7 +287,7 @@ extension EventDetailView {
                 .foregroundStyle(Color.black.opacity(0.5))
                 .padding(.bottom, 15)
             NavigationLink {
-                CalendarListView(selectedCalendar: $editEventCalendar, selectedColor: $editEventColor)
+                CalendarListView(calendars: $calendars, selectedCalendar: $editEventCalendar, selectedColor: $editEventColor)
             } label: {
                 HStack(spacing: 5) {
                     Text("Select Calendar")

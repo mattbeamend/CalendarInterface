@@ -20,57 +20,46 @@ struct ListCalendarView: View {
 //        Event(id: "6", name: "Barbers Appointment", start: stringToDate(dateString: "2023-12-28T11:00:00+0000"), end: stringToDate(dateString: "2023-12-28T11:30:00+0000"), color: Color.red.toHex() ?? "#000000", allDay: false)
 //    ]
     
-    @State var testCalendars: [GroupCalendar] = [
-        GroupCalendar(id: "1", name: "Personal", color: "#FF0000"),
-        GroupCalendar(id: "2", name: "Work", color: "#FFFF00"),
-        GroupCalendar(id: "3", name: "Stoke Poges Tennis", color: "#0000ff"),
-    ]
     
-    @State var events: [Event] = []
+    
+    @Binding var calendars: [GroupCalendar]
+    @Binding var events: [Event]
+    
+    
     @State var selectedDate: Date = Date.now
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.black.opacity(0.9).ignoresSafeArea()
-                VStack {
-                    Spacer()
-                        .ignoresSafeArea()
-                        .frame(height: 0)
-                    ScrollView(.vertical) {
-                        VStack(spacing: 5) {
-                            CustomDatePicker(color: Color.white, events: events, selectedDate: $selectedDate)
-                                .padding(10)
-                            Spacer().frame(height: 3)
-                            EventList(selectedDate: selectedDate, events: $events, calendars: $testCalendars)
-                        }
+        ZStack {
+            Color.black.opacity(0.9).ignoresSafeArea()
+            VStack {
+                Spacer()
+                    .ignoresSafeArea()
+                    .frame(height: 0)
+                ScrollView(.vertical) {
+                    VStack(spacing: 5) {
+                        CustomDatePicker(color: Color.white, events: events, selectedDate: $selectedDate)
+                            .padding(10)
+                        Spacer().frame(height: 3)
+                        EventList(selectedDate: selectedDate, events: $events, calendars: $calendars)
                     }
                 }
-                
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        addEventButton
-                            .padding()
-                    }
-                }
-                
             }
-            .onAppear(perform: {
-                if let savedEventsData = UserDefaults.standard.data(forKey: "events") {
-                    let decoder = JSONDecoder()
-                    if let savedEvents = try? decoder.decode([Event].self, from: savedEventsData) {
-                        events = savedEvents
-                    }
+            
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    addEventButton
+                        .padding()
                 }
-            })
+            }
+            
         }
     }
     
     private var addEventButton: some View {
         NavigationLink {
-            CreateEventView(events: $events, startTime: selectedDate)
+            CreateEventView(events: $events, calendars: $calendars, startTime: selectedDate)
         } label: {
             Image(systemName: "plus")
                 .font(.system(size: 26, weight: .semibold))
@@ -90,8 +79,8 @@ func stringToDate(dateString: String) -> Date {
 }
 
 
-struct ListCalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        ListCalendarView()
-    }
-}
+//struct ListCalendarView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ListCalendarView()
+//    }
+//}

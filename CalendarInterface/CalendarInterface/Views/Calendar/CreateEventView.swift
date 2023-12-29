@@ -12,9 +12,11 @@ struct CreateEventView: View {
     
     
     @Binding var events: [Event]
+    @Binding var calendars: [GroupCalendar]
     
     @Environment(\.presentationMode) var presentationMode
     @FocusState private var focused: Bool?
+    @State var initHasRun = false
     
     @State var showSelectStart: Bool = false
     @State var showSelectFinish: Bool = false
@@ -51,11 +53,14 @@ struct CreateEventView: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear(perform: {
-            // change start time to have same hour/minutes as users current time and round to nearest 5 minutes
-            let dateMinutes = Calendar.current.dateComponents([.hour, .minute], from: Date.now)
-            self.startTime = Calendar.current.date(bySettingHour: dateMinutes.hour ?? 0, minute: dateMinutes.minute ?? 0, second: 0, of: startTime)?.roundToNearestFiveMinutes() ?? startTime
-            // set default finish time to 5 minutes after start time
-            self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
+            if(!initHasRun) { // stops the values being reset when you visit a navigation link (i.e. calendar listing)
+                // change start time to have same hour/minutes as users current time and round to nearest 5 minutes
+                let dateMinutes = Calendar.current.dateComponents([.hour, .minute], from: Date.now)
+                self.startTime = Calendar.current.date(bySettingHour: dateMinutes.hour ?? 0, minute: dateMinutes.minute ?? 0, second: 0, of: startTime)?.roundToNearestFiveMinutes() ?? startTime
+                // set default finish time to 5 minutes after start time
+                self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
+                initHasRun = true
+            }
         })
     }
 }
@@ -166,7 +171,7 @@ extension CreateEventView {
                 .foregroundStyle(Color.black.opacity(0.5))
                 .padding(.bottom, 15)
             NavigationLink {
-                CalendarListView(selectedCalendar: $selectedCalendar, selectedColor: $eventColor)
+                CalendarListView(calendars: $calendars, selectedCalendar: $selectedCalendar, selectedColor: $eventColor)
             } label: {
                 HStack(spacing: 5) {
                     Text("Select Calendar")
@@ -211,11 +216,7 @@ extension CreateEventView {
 struct CalendarListView: View {
     
     // need to fetch the calendars the user is a member of
-    @State var testCalendars: [GroupCalendar] = [
-        GroupCalendar(id: "1", name: "Personal", color: "#FF0000"),
-        GroupCalendar(id: "2", name: "Work", color: "#FFFF00"),
-        GroupCalendar(id: "3", name: "Stoke Poges Tennis", color: "#0000ff"),
-    ]
+    @Binding var calendars: [GroupCalendar]
     
     @Environment(\.presentationMode) var presentationMode
     @Binding var selectedCalendar: GroupCalendar
@@ -224,7 +225,7 @@ struct CalendarListView: View {
     var body: some View {
         VStack {
             heading
-            List(testCalendars) { calendar in
+            List(calendars) { calendar in
                 Button {
                     selectedCalendar = calendar
                     selectedColor = Color(hex: calendar.color) ?? Color.accentColor

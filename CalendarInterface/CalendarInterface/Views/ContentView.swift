@@ -17,9 +17,47 @@ struct ContentView: View {
         UIDatePicker.appearance().minuteInterval = 5
     }
     
+    
+    @State var calendars: [GroupCalendar] = []
+    @State var events: [Event] = []
+    
     var body: some View {
-        ListCalendarView()
+        NavigationStack {
+            TabView {
+                HomeView()
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                        Text("Home")
+                    }
+                ListCalendarView(calendars: $calendars, events: $events)
+                    .tabItem {
+                        Image(systemName: "calendar")
+                        Text("Calendar")
+                    }
+                GroupCalendarListingView(events: $events, calendars: $calendars)
+                    .tabItem {
+                        Image(systemName: "list.bullet")
+                        Text("Listing")
+                    }
+            }
+            .onAppear(perform: {
+                if let savedEventsData = UserDefaults.standard.data(forKey: "events") {
+                    let decoder = JSONDecoder()
+                    if let savedEvents = try? decoder.decode([Event].self, from: savedEventsData) {
+                        events = savedEvents
+                    }
+                }
+                if let savedEventsData = UserDefaults.standard.data(forKey: "calendars") {
+                    let decoder = JSONDecoder()
+                    if let savedCalendars = try? decoder.decode([GroupCalendar].self, from: savedEventsData) {
+                        calendars = savedCalendars
+                    }
+                }
+            })
+        }
     }
+    
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

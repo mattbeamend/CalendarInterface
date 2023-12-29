@@ -25,6 +25,9 @@
 		66654EF72AD31ECE00D4CD36 /* CalendarInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66654EF62AD31ECE00D4CD36 /* CalendarInterfaceTests.swift */; };
 		66654EFE2AD31F6500D4CD36 /* DateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66654EFD2AD31F6500D4CD36 /* DateTests.swift */; };
 		66AB48822B3EF50B00C1F48A /* GroupCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AB48812B3EF50B00C1F48A /* GroupCalendar.swift */; };
+		66AB48842B3F39A200C1F48A /* AddCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AB48832B3F39A200C1F48A /* AddCalendarView.swift */; };
+		66AB48862B3F3A4700C1F48A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AB48852B3F3A4700C1F48A /* HomeView.swift */; };
+		66AB48882B3F3B2D00C1F48A /* GroupCalendarListingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AB48872B3F3B2D00C1F48A /* GroupCalendarListingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +62,9 @@
 		66654EFD2AD31F6500D4CD36 /* DateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTests.swift; sourceTree = "<group>"; };
 		66AB48802B3E912900C1F48A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		66AB48812B3EF50B00C1F48A /* GroupCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCalendar.swift; sourceTree = "<group>"; };
+		66AB48832B3F39A200C1F48A /* AddCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCalendarView.swift; sourceTree = "<group>"; };
+		66AB48852B3F3A4700C1F48A /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		66AB48872B3F3B2D00C1F48A /* GroupCalendarListingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCalendarListingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,13 +128,11 @@
 		6621616A2AC5D0FA00347853 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				66AB488A2B3F451800C1F48A /* ManageCalendars */,
+				66AB48892B3F44F200C1F48A /* Calendar */,
 				663B4CE92AC82AF800B25826 /* Extensions */,
-				663B4CE82AC828E700B25826 /* ViewComponents */,
-				663B4CE62AC8283400B25826 /* ListCalendarView.swift */,
-				663210C42B360794003D7C2C /* CreateEventView.swift */,
-				662161682AC5D09200347853 /* BlockCalendarView.swift */,
 				662161582AC5D05100347853 /* ContentView.swift */,
-				663210C82B3CC8B4003D7C2C /* EventDetailView.swift */,
+				66AB48852B3F3A4700C1F48A /* HomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -176,6 +180,27 @@
 				66654EFD2AD31F6500D4CD36 /* DateTests.swift */,
 			);
 			path = CalendarInterfaceTests;
+			sourceTree = "<group>";
+		};
+		66AB48892B3F44F200C1F48A /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				663B4CE82AC828E700B25826 /* ViewComponents */,
+				663B4CE62AC8283400B25826 /* ListCalendarView.swift */,
+				663210C42B360794003D7C2C /* CreateEventView.swift */,
+				662161682AC5D09200347853 /* BlockCalendarView.swift */,
+				663210C82B3CC8B4003D7C2C /* EventDetailView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		66AB488A2B3F451800C1F48A /* ManageCalendars */ = {
+			isa = PBXGroup;
+			children = (
+				66AB48832B3F39A200C1F48A /* AddCalendarView.swift */,
+				66AB48872B3F3B2D00C1F48A /* GroupCalendarListingView.swift */,
+			);
+			path = ManageCalendars;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,9 +312,12 @@
 				663210C72B3CC200003D7C2C /* Color.swift in Sources */,
 				662161592AC5D05100347853 /* ContentView.swift in Sources */,
 				663B4CED2AC82B5200B25826 /* Date.swift in Sources */,
+				66AB48882B3F3B2D00C1F48A /* GroupCalendarListingView.swift in Sources */,
+				66AB48842B3F39A200C1F48A /* AddCalendarView.swift in Sources */,
 				662161652AC5D06000347853 /* Event.swift in Sources */,
 				662161572AC5D05100347853 /* CalendarInterfaceApp.swift in Sources */,
 				66654EEF2AD3194900D4CD36 /* EventList.swift in Sources */,
+				66AB48862B3F3A4700C1F48A /* HomeView.swift in Sources */,
 				663B4CE72AC8283400B25826 /* ListCalendarView.swift in Sources */,
 				66AB48822B3EF50B00C1F48A /* GroupCalendar.swift in Sources */,
 			);
