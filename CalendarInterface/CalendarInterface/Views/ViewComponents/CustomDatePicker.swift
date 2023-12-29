@@ -27,21 +27,20 @@ struct CustomDatePicker: View {
         }
         .highPriorityGesture(DragGesture().onEnded({ gesture in
             if gesture.translation.width > 0 { // swipe right
+                var component = DateComponents()
+                component.month = -1
                 withAnimation(.default) {
-                    var component = DateComponents()
-                    component.month = -1
                     date = Calendar.current.date(byAdding: component, to: date)!
-                    
-                    selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
                 }
+                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
             }
             if gesture.translation.width < 0 { // swipe left
+                var component = DateComponents()
+                component.month = 1
                 withAnimation(.default) {
-                    var component = DateComponents()
-                    component.month = 1
                     date = Calendar.current.date(byAdding: component, to: date)!
-                    selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
                 }
+                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
             }
         }))
     }
