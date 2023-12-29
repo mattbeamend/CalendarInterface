@@ -21,41 +21,26 @@ struct ListCalendarView: View {
     ]
     
     @State var events: [Event] = []
-    
-    
-//    init() {
-//        if let savedCustomObjectsData = UserDefaults.standard.object(forKey: "events") {
-//            let decoder = JSONDecoder()
-//            if let savedCustomObjects = try? decoder.decode([Event].self, from: savedCustomObjectsData as! Data) {
-//                events = savedCustomObjects
-//            }
-//        }
-//    }
-    init() {
-        if let savedEventsData = UserDefaults.standard.data(forKey: "events") {
-            let decoder = JSONDecoder()
-            if let savedEvents = try? decoder.decode([Event].self, from: savedEventsData) {
-                print(savedEvents)
-                events = savedEvents
-            }
-        }
-    }
-    
-    
     @State var selectedDate: Date = Date.now
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.black.opacity(0.9).ignoresSafeArea()
-                ScrollView(.vertical) {
-                    VStack(spacing: 5) {
-                        CustomDatePicker(color: Color.white, events: events, selectedDate: $selectedDate)
-                            .padding(10)
-                        Spacer().frame(height: 3)
-                        EventList(selectedDate: selectedDate, events: $events)
+                VStack {
+                    Spacer()
+                        .ignoresSafeArea()
+                        .frame(height: 0)
+                    ScrollView(.vertical) {
+                        VStack(spacing: 5) {
+                            CustomDatePicker(color: Color.white, events: events, selectedDate: $selectedDate)
+                                .padding(10)
+                            Spacer().frame(height: 3)
+                            EventList(selectedDate: selectedDate, events: $events)
+                        }
                     }
                 }
+                
                 VStack {
                     Spacer()
                     HStack {

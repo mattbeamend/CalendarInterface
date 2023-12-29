@@ -5,10 +5,6 @@
 //  Created by Matthew Smith on 27/12/2023.
 //
 
-// Requirements:
-// - User can view data about the event
-// - User can delete the event
-// - User can edit the event
 
 import SwiftUI
 
@@ -38,6 +34,7 @@ struct EventDetailView: View {
                     editAllDay
                     editTimings
                     editColor
+                    deleteEventButton
                     Spacer()
                 }
             } else {
@@ -46,6 +43,11 @@ struct EventDetailView: View {
                     timings
                     Spacer()
                 }
+                .highPriorityGesture(DragGesture().onEnded({ gesture in
+                    if gesture.translation.width > 0 { // swipe back (right)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }))
             }
         }
         .navigationBarBackButtonHidden()
@@ -56,14 +58,28 @@ extension EventDetailView {
     
     private var heading: some View {
         HStack {
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }, label: {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Color.white)
-            })
-            .frame(width: 50, alignment: .leading)
+            if(!editMode) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .foregroundStyle(Color.white)
+                })
+                .frame(width: 55, alignment: .leading)
+            } else {
+                Button(action: {
+                    withAnimation(.easeInOut) {
+                        editMode = false
+                    }
+                }, label: {
+                    Text("Cancel")
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.white)
+                })
+                .frame(width: 55, alignment: .leading)
+            }
+            
             Spacer()
             Text("Event")
                 .foregroundStyle(Color.white)
@@ -94,7 +110,7 @@ extension EventDetailView {
                         .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.white)
                 })
-                .frame(width: 50, alignment: .trailing)
+                .frame(width: 55, alignment: .trailing)
             } else {
                 // Edit Button
                 Button(action: {
@@ -111,7 +127,7 @@ extension EventDetailView {
                         .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.white)
                 })
-                .frame(width: 50, alignment: .trailing)
+                .frame(width: 55, alignment: .trailing)
             }
             
         
@@ -127,19 +143,20 @@ extension EventDetailView {
     }
     
     private var eventName: some View {
-        HStack(spacing: 20) {
+        HStack(spacing: 5) {
             Circle()
                 .foregroundStyle(Color(hex: event.color) ?? Color.accentColor)
                 .frame(width: 25, height: 25)
+                .padding(15)
             Text(event.name)
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
+                .padding(.vertical)
             Spacer()
         }
-        .padding()
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(Color.black.opacity(0.1))
+                .foregroundStyle(Color(hex: event.color)?.opacity(0.2) ?? Color.accentColor.opacity(0.2))
         )
         .padding(10)
     }
@@ -230,6 +247,29 @@ extension EventDetailView {
 
         }
         .padding(10)
+    }
+    
+    private var deleteEventButton: some View {
+        Button(action: {
+            if let index = events.firstIndex(where: { $0.id == event.id}) {
+                events.remove(at: index)
+            }
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(events) {
+                UserDefaults.standard.set(encoded, forKey: "events")
+            }
+            presentationMode.wrappedValue.dismiss()
+        }, label: {
+            Text("Delete Event")
+                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .foregroundStyle(Color.white)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color.red)
+                )
+                .padding(30)
+        })
     }
 }
 

@@ -35,6 +35,11 @@ struct CreateEventView: View {
                     datePicker
                     colorPicker
                 }
+                .highPriorityGesture(DragGesture().onEnded({ gesture in
+                    if gesture.translation.width > 0 { // swipe back (right)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }))
             }
             
         }

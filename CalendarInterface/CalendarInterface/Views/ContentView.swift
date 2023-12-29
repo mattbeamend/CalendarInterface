@@ -5,6 +5,10 @@
 //  Created by Matthew Smith on 28/09/2023.
 //
 
+// TODO:
+// - Add swipe gestures to the app, especially when changing the different months on the calendar.
+// - Add a go back to current date button
+
 import SwiftUI
 
 struct ContentView: View {

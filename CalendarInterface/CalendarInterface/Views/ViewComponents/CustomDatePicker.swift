@@ -25,6 +25,25 @@ struct CustomDatePicker: View {
             calendarDays
             datesGrid
         }
+        .highPriorityGesture(DragGesture().onEnded({ gesture in
+            if gesture.translation.width > 0 { // swipe right
+                withAnimation(.default) {
+                    var component = DateComponents()
+                    component.month = -1
+                    date = Calendar.current.date(byAdding: component, to: date)!
+                    
+                    selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
+                }
+            }
+            if gesture.translation.width < 0 { // swipe left
+                withAnimation(.default) {
+                    var component = DateComponents()
+                    component.month = 1
+                    date = Calendar.current.date(byAdding: component, to: date)!
+                    selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
+                }
+            }
+        }))
     }
 }
 
@@ -41,10 +60,27 @@ extension CustomDatePicker {
                     .foregroundStyle(color)
             }
             Spacer()
+            
+            backToDate
             changeMonths
+            
         }
         .padding(.horizontal, 5)
         .padding(.bottom)
+    }
+    
+    private var backToDate: some View {
+        Button {
+            withAnimation(.default) {
+                date = Date.now
+                selectedDate = Date.now
+            }
+        } label: {
+            Image(systemName: "calendar")
+                .font(.system(size: 20, weight: .regular))
+                .foregroundStyle(color)
+        }
+        .padding(.horizontal, 20)
     }
     
     private var changeMonths: some View {
