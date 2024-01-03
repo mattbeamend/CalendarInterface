@@ -124,5 +124,19 @@ extension Date {
         let roundedDate = calendar.date(bySetting: .minute, value: roundedMinutes, of: self) ?? self
         return roundedDate
     }
+    
+    // Returns true if date is tomorrow
+    func isTomorrow() -> Bool {
+        var component = DateComponents()
+        component.day = -1
+        let date = Calendar.current.date(byAdding: component, to: self)!
+        return date.sameDay(date: Date.now)
+    }
+    
+    // Returns true if date is within range of two other dates
+    func isDateInRange(start: Date, end: Date) -> Bool {
+        let range = start...end
+        return range.contains(self)
+    }
 
 }

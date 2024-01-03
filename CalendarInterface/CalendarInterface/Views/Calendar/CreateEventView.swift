@@ -33,28 +33,28 @@ struct CreateEventView: View {
     @State var eventTitle: String = ""
     @State var eventColor: Color = Color(hex: "#FF0000") ?? Color.accentColor
     
-    @State var selectedCalendar: GroupCalendar = GroupCalendar(id: "1", name: "Personal", color: "#FF0000")
+    @State var selectedCalendar: GroupCalendar
     
     var body: some View {
-        VStack {
-            heading
-            ScrollView(.vertical) {
-                VStack {
-                    eventTextField
-                    allDayToggle
-                    datePicker
-                    Divider().padding(10)
-                    calendarSelector
-                    Divider().padding(10)
-                    colorPicker
-                }
-                .highPriorityGesture(DragGesture().onEnded({ gesture in
-                    if gesture.translation.width > 0 { // swipe back (right)
-                        presentationMode.wrappedValue.dismiss()
+        ZStack {
+            Color("Background").ignoresSafeArea()
+            VStack {
+                heading
+                ScrollView(.vertical) {
+                    VStack {
+                        eventTextField
+                        allDayToggle
+                        datePicker
+                        
+                        calendarSelector
                     }
-                }))
+                    .highPriorityGesture(DragGesture().onEnded({ gesture in
+                        if gesture.translation.width > 0 { // swipe back (right)
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }))
+                }
             }
-            
         }
         .navigationBarBackButtonHidden(true)
         .onAppear(perform: {
@@ -64,6 +64,7 @@ struct CreateEventView: View {
                 self.startTime = Calendar.current.date(bySettingHour: dateMinutes.hour ?? 0, minute: dateMinutes.minute ?? 0, second: 0, of: startTime)?.roundToNearestFiveMinutes() ?? startTime
                 initHasRun = true
             }
+            eventColor = Color(hex: selectedCalendar.color) ?? Color.accentColor
         })
         .onChange(of: startTime) { newValue in
             self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
@@ -102,7 +103,7 @@ extension CreateEventView {
         .padding(.bottom, 5)
         .background(
             Rectangle()
-                .foregroundStyle(Color.black.opacity(0.9))
+                .foregroundStyle(Color.accentColor)
                 .ignoresSafeArea()
         )
         .padding(.bottom, 5)
@@ -114,9 +115,11 @@ extension CreateEventView {
                 .font(.system(size: 18, weight: .regular, design: .rounded))
                 .padding()
                 .submitLabel(.done)
+                .frame(height: 58)
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray.opacity(0.4))
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundStyle(Color.white)
+                        .shadow(color: Color.black.opacity(0.1), radius: 10, y: 1)
                 )
                 .focused($focused, equals: true)
                 .onAppear {
@@ -149,25 +152,15 @@ extension CreateEventView {
             DatePicker("Start", selection: $startTime, displayedComponents: !isAllDay ? [.hourAndMinute, .date] : .date)
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
-                .frame(height: 50)
-        
+                .frame(height: 40)
+            Divider()
             DatePicker("Finish", selection: $finishTime, in: (Calendar.current.date(byAdding: .minute, value: 5, to: startTime) ?? Date.now)..., displayedComponents: !isAllDay ? [.hourAndMinute, .date] : .date)
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
-                .frame(height: 50)
+                .frame(height: 40)
 
         }
         .padding(10)
-    }
-    
-    private var colorPicker: some View {
-        ColorPicker(selection: $eventColor, label: {
-            Text("Event Color")
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                .foregroundStyle(Color.black)
-        })
-        .padding(10)
-        .padding(.trailing)
     }
     
     private var calendarSelector: some View {
@@ -181,7 +174,7 @@ extension CreateEventView {
             } label: {
                 HStack(spacing: 5) {
                     Text("Select Calendar")
-                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.black)
                     Spacer()
                     Circle()
@@ -192,19 +185,23 @@ extension CreateEventView {
                         .foregroundStyle(Color.black)
                 }
                 .padding()
+                .frame(height: 58)
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray.opacity(0.4))
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundStyle(Color.white)
+                        .shadow(color: Color.black.opacity(0.1), radius: 10, y: 1)
                 )
             }
         }
-        .padding(10)
+        .padding(.vertical, 20)
+        .padding(.horizontal, 10)
+        
     }
     
     
     private func createEvent() {
         // TODO: need to santise inputs, check for missing information
-        var event = Event(id: UUID().uuidString, name: eventTitle, start: startTime, end: finishTime, color: eventColor.toHex() ?? "#000000", allDay: isAllDay, calendarId: selectedCalendar.id)
+        var event = Event(id: UUID().uuidString, name: eventTitle, start: startTime, end: finishTime, color: selectedCalendar.color , allDay: isAllDay, calendarId: selectedCalendar.id)
         if(event.name.isEmpty) { return }
         if(event.start > event.end) {
             event.end = event.start
@@ -284,7 +281,7 @@ struct CalendarListView: View {
         .padding(.bottom, 5)
         .background(
             Rectangle()
-                .foregroundStyle(Color.black.opacity(0.9))
+                .foregroundStyle(Color.accentColor)
                 .ignoresSafeArea()
         )
         

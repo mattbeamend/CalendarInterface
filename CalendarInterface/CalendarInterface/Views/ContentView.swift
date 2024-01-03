@@ -5,9 +5,6 @@
 //  Created by Matthew Smith on 28/09/2023.
 //
 
-// TODO:
-// - Add swipe gestures to the app, especially when changing the different months on the calendar.
-// - Add a go back to current date button
 
 import SwiftUI
 
@@ -25,28 +22,32 @@ struct ContentView: View {
         }
     }
     
-    
+    @State var defaultCalendar: GroupCalendar = GroupCalendar(id: "1", name: "Personal", color: "#FF0000")
     @State var calendars: [GroupCalendar] = []
     @State var events: [Event] = []
     
     var body: some View {
         NavigationStack {
             TabView {
-                HomeView()
-                    .tabItem {
-                        Image(systemName: "house.fill")
-                        Text("Home")
-                    }
-                ListCalendarView(calendars: $calendars, events: $events)
-                    .tabItem {
-                        Image(systemName: "calendar")
-                        Text("Calendar")
-                    }
-                GroupCalendarListingView(events: $events, calendars: $calendars)
-                    .tabItem {
-                        Image(systemName: "list.bullet")
-                        Text("Listing")
-                    }
+                Group {
+                    HomeView(calendars: $calendars, events: $events, defaultCalendar: defaultCalendar)
+                        .tabItem {
+                            Image(systemName: "house.fill")
+                            Text("Home")
+                        }
+                    ListCalendarView(calendars: $calendars, events: $events, defaultCalendar: defaultCalendar)
+                        .tabItem {
+                            Image(systemName: "calendar")
+                            Text("Calendar")
+                        }
+                    GroupCalendarListingView(events: $events, calendars: $calendars)
+                        .tabItem {
+                            Image(systemName: "list.bullet")
+                            Text("Listing")
+                        }
+                }
+                .toolbarBackground(Color.white, for: .tabBar)
+                .toolbarBackground(.visible, for: .tabBar)
             }
             .onAppear(perform: {
                 if let savedEventsData = UserDefaults.standard.data(forKey: "events") {
@@ -61,6 +62,7 @@ struct ContentView: View {
                         calendars =  savedCalendars
                     }
                 }
+                print("DATA FETCHED")
             })
         }
     }

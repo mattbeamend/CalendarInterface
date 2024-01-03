@@ -43,6 +43,9 @@ struct CustomDatePicker: View {
                 selectedDate = Calendar.current.date(byAdding: component, to: selectedDate)?.startOfMonth() ?? Date.now
             }
         }))
+        .onAppear(perform: {
+            date = Date.now
+        })
     }
 }
 
@@ -141,7 +144,7 @@ extension CustomDatePicker {
         Button {
             selectedDate = date
         } label: {
-            VStack(spacing: 6) {
+            VStack(spacing: 4) {
                 if(Calendar.current.isDate(date, equalTo: selectedDate, toGranularity: .day)) {
                     Text(date.getDateString())
                         .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -166,6 +169,11 @@ extension CustomDatePicker {
                         Circle()
                             .foregroundStyle(color)
                             .frame(width: 5, height: 5)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white.opacity(0.5), lineWidth: 0.5)
+                                    .frame(width: 5, height: 5)
+                            )
                     }
                 }
                 .frame(width: 30, height: 10, alignment: .top)

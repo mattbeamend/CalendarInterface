@@ -15,7 +15,7 @@ struct EventDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var editMode: Bool = false
     
-    @State var events: [Event]
+    @Binding var events: [Event]
     @State var event: Event
     @State var calendar: GroupCalendar
     
@@ -31,38 +31,43 @@ struct EventDetailView: View {
     
     
     var body: some View {
-        VStack {
-            heading
-        }
-        ScrollView(.vertical) {
-            if(editMode) {
-                VStack {
-                    editName
-                    editAllDay
-                    editTimings
-                    Divider().padding(10)
-                    editCalendar
-                    Divider().padding(10)
-                    editColor
-                    deleteEventButton
-                    Spacer()
-                }
-            } else {
-                VStack {
-                    eventName
-                    timings
-                    Divider().frame(height: 10).padding(10)
-                    eventCalendar
-                    Spacer()
-                }
-                .highPriorityGesture(DragGesture().onEnded({ gesture in
-                    if gesture.translation.width > 0 { // swipe back (right)
-                        presentationMode.wrappedValue.dismiss()
+        ZStack {
+            Color("Background").ignoresSafeArea()
+            VStack {
+                heading
+                ScrollView(.vertical) {
+                    if(editMode) {
+                        VStack {
+                            editName
+                            editAllDay
+                            editTimings
+                            Divider().padding(10)
+                            editCalendar
+                            Divider().padding(10)
+                            editColor
+                            deleteEventButton
+                            Spacer()
+                        }
+                    } else {
+                        VStack {
+                            eventName
+                            timings
+                            Spacer().frame(height: 20)
+                            eventCalendar
+                            Spacer()
+                        }
+                        .highPriorityGesture(DragGesture().onEnded({ gesture in
+                            if gesture.translation.width > 0 { // swipe back (right)
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }))
                     }
-                }))
+                }
             }
+            
+            .navigationBarBackButtonHidden()
         }
-        .navigationBarBackButtonHidden()
+        
     }
 }
 
@@ -154,7 +159,7 @@ extension EventDetailView {
         .padding(.bottom, 5)
         .background(
             Rectangle()
-                .foregroundStyle(Color.black.opacity(0.9))
+                .foregroundStyle(Color.accentColor)
                 .ignoresSafeArea()
         )
         .padding(.bottom, 5)
@@ -162,19 +167,20 @@ extension EventDetailView {
     
     private var eventName: some View {
         HStack(spacing: 5) {
-            Circle()
+            RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(Color(hex: event.color) ?? Color.accentColor)
-                .frame(width: 25, height: 25)
-                .padding(15)
+                .frame(width: 22, height: 22)
+                .padding(10)
             Text(event.name)
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                 .padding(.vertical)
             Spacer()
         }
-        .frame(maxWidth: .infinity)
+        .frame(height: 60)
         .background(
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(Color(hex: event.color)?.opacity(0.2) ?? Color.accentColor.opacity(0.2))
+            RoundedRectangle(cornerRadius: 5)
+                .foregroundStyle(Color.white)
+                .shadow(color: Color.black.opacity(0.1), radius: 10, y: 1)
         )
         .padding(10)
     }
@@ -193,7 +199,7 @@ extension EventDetailView {
                         .font(.system(size: 18, weight: .medium))
                 }
             }
-            Spacer().frame(height: 20)
+            Divider().frame(height: 30)
             Text("To")
                 .font(.system(size: 14, weight: .regular))
                 .foregroundStyle(Color.black.opacity(0.5))
@@ -214,20 +220,23 @@ extension EventDetailView {
     private var eventCalendar: some View {
         VStack(alignment: .leading, spacing: 15) {
             Text("Calendar")
-                .font(.system(size: 14, weight: .regular))
-                .foregroundStyle(Color.black.opacity(0.5))
+                .font(.system(size: 16, weight: .medium))
+                .foregroundStyle(Color.black)
+                .padding(.bottom, 5)
             HStack {
                 Circle()
                     .foregroundStyle(Color(hex: calendar.color) ?? Color.accentColor)
-                    .frame(width: 20, height: 20)
+                    .frame(width: 15, height: 15)
                 Text(calendar.name)
-                    .font(.system(size: 14, weight: .medium))
+                    .font(.system(size: 16, weight: .medium))
                 Spacer()
             }
             .padding()
+            .frame(height: 60)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.black.opacity(0.2))
+                RoundedRectangle(cornerRadius: 5)
+                    .foregroundStyle(Color.white)
+                    .shadow(color: Color.black.opacity(0.1), radius: 10, y: 1)
             )
         }
         .padding(10)

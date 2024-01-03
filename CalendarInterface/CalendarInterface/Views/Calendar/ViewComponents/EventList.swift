@@ -13,7 +13,10 @@ struct EventList: View {
     @Binding var events: [Event]
     @Binding var calendars: [GroupCalendar]
     
-    @State var personalCalendar: GroupCalendar = GroupCalendar(id: "1", name: "Personal", color: "#FF0000")
+    @State var defaultCalendar: GroupCalendar
+    @State var calendarEvents: [Event] = []
+    
+    @State var isGroupCalendar: Bool
     
     var body: some View {
         VStack(spacing: 7) {
@@ -28,6 +31,7 @@ struct EventList: View {
                 Spacer()
             }
             .frame(height: 30)
+            .padding(.top, 5)
             .padding(.bottom, 15)
     
             // Display all day events
@@ -45,7 +49,7 @@ struct EventList: View {
             }
             
             // Display normal events
-            ForEach(selectedDate.getDateEvents(events: events).filter { $0.allDay == false }) { event in
+            ForEach(selectedDate.getDateEvents(events: calendarEvents).filter { $0.allDay == false }) { event in
                 EventCard(event: event)
             }
             
@@ -55,7 +59,7 @@ struct EventList: View {
             }
             
             Spacer()
-                .frame(height: 1000)
+                .frame(height: 300)
                 .ignoresSafeArea()
         }
         .padding(.vertical)
@@ -63,10 +67,18 @@ struct EventList: View {
         .frame(maxWidth: .infinity)
         .background(
             Rectangle()
-                .cornerRadius(10, corners: [.topLeft, .topRight])
-                .foregroundColor(Color.white)
+                //.cornerRadius(10, corners: [.topLeft, .topRight])
+                .foregroundStyle(Color("Background"))
                 .ignoresSafeArea()
         )
+        .onAppear(perform: {
+            if(isGroupCalendar) {
+                calendarEvents = events.filter({ $0.calendarId == defaultCalendar.id })
+            } else {
+                calendarEvents = events
+            }
+            
+        })
     }
 }
 
@@ -78,16 +90,18 @@ extension EventList {
                 .font(.system(size: 22, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
             NavigationLink {
-                CreateEventView(events: $events, calendars: $calendars, startTime: selectedDate)
+                CreateEventView(events: $events, calendars: $calendars, startTime: selectedDate, selectedCalendar: defaultCalendar)
             } label: {
                 Text("Tap here to create.")
                     .font(.system(size: 16, weight: .medium, design: .rounded))
+                    .foregroundStyle(Color(hex: defaultCalendar.color) ?? Color.accentColor)
             }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .foregroundStyle(Color.gray.opacity(0.1))
+                .foregroundStyle(Color.white)
+                .shadow(color: Color.black.opacity(0.1), radius: 10, y: 1)
         )
         .padding()
     }
@@ -95,30 +109,42 @@ extension EventList {
     @ViewBuilder
     private func EventCard(event: Event) -> some View {
         NavigationLink {
-            EventDetailView(calendars: $calendars, events: events, event: event, calendar: calendars.first(where: { $0.id == event.calendarId }) ?? personalCalendar)
+            EventDetailView(calendars: $calendars, events: $events, event: event, calendar: calendars.first(where: { $0.id == event.calendarId }) ?? defaultCalendar)
         } label: {
             HStack(spacing: 15) {
                 Rectangle()
-                    .frame(width: 10)
-                    .cornerRadius(10, corners: [.topLeft, .bottomLeft])
+                    .frame(width: 16)
+                    .cornerRadius(5, corners: [.topLeft, .bottomLeft])
                     .foregroundStyle(Color(hex: event.color) ?? Color.blue)
 
                 VStack(alignment: .leading, spacing: 5) {
                     Text(event.name)
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
                         .foregroundStyle(Color.black)
-                    if(!event.allDay) {
-                        Text("\(event.start.getTimeString()) - \(event.end.getTimeString())")
-                            .font(.system(size: 14, weight: .medium, design: .rounded))
-                            .foregroundStyle(Color.black.opacity(0.7))
-                    }
+                    Text((calendars.first(where: { $0.id == event.calendarId }) ?? defaultCalendar).name)
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.black.opacity(0.5))
+                    
                 }
                 .padding(.vertical)
                 Spacer()
+                if(!event.allDay) {
+                    VStack(spacing: 5) {
+                        Text(event.start.getTimeString())
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Color.black)
+                        Text(event.end.getTimeString())
+                            .font(.system(size: 14, weight: .regular, design: .rounded))
+                            .foregroundStyle(Color.black)
+                    }
+                    .padding(10)
+                    .padding(.trailing, 5)
+                }
             }
+            .frame(height: 68)
             .background(
                 RoundedRectangle(cornerRadius: 5)
-                    .foregroundStyle(Color(hex: event.color)?.opacity(0.2) ?? Color.blue.opacity(0.2))
+                    .foregroundStyle(Color.white)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 5)
@@ -126,6 +152,10 @@ extension EventList {
                     
             )
             .frame(maxWidth: .infinity)
+            .shadow(color: Color.black.opacity(0.1), radius: 10, y: 1)
+            .padding(.vertical, 3)
+        
+            
         }
     }
 }

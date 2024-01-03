@@ -15,7 +15,7 @@ struct AddCalendarView: View {
     @Binding var calendars: [GroupCalendar]
     
     @State var calendarName: String = ""
-    @State var calendarColor: Color = Color.accentColor
+    @State var calendarColor: Color = Color.orange
     
     
     var body: some View {
@@ -60,7 +60,7 @@ extension AddCalendarView {
         .padding(.bottom, 5)
         .background(
             Rectangle()
-                .foregroundStyle(Color.black.opacity(0.9))
+                .foregroundStyle(Color.accentColor)
                 .ignoresSafeArea()
         )
         .padding(.bottom, 5)
@@ -72,9 +72,11 @@ extension AddCalendarView {
                 .font(.system(size: 18, weight: .regular, design: .rounded))
                 .padding()
                 .submitLabel(.done)
+                .frame(height: 58)
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray.opacity(0.4))
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundStyle(Color.white)
+                        .shadow(color: Color.black.opacity(0.1), radius: 10, y: 1)
                 )
                 .focused($focused, equals: true)
                 .onAppear {

@@ -24,13 +24,13 @@ struct ListCalendarView: View {
     
     @Binding var calendars: [GroupCalendar]
     @Binding var events: [Event]
-    
+    @State var defaultCalendar: GroupCalendar
     
     @State var selectedDate: Date = Date.now
     
     var body: some View {
         ZStack {
-            Color.black.opacity(0.9).ignoresSafeArea()
+            Color(hex:"363B57").ignoresSafeArea()
             VStack {
                 Spacer()
                     .ignoresSafeArea()
@@ -38,9 +38,9 @@ struct ListCalendarView: View {
                 ScrollView(.vertical) {
                     VStack(spacing: 5) {
                         CustomDatePicker(color: Color.white, events: events, selectedDate: $selectedDate)
-                            .padding(10)
-                        Spacer().frame(height: 3)
-                        EventList(selectedDate: selectedDate, events: $events, calendars: $calendars)
+                            .padding(.horizontal, 10)
+                            .padding(.bottom, 5)
+                        EventList(selectedDate: selectedDate, events: $events, calendars: $calendars, defaultCalendar: calendars.first ?? GroupCalendar(id: "1", name: "Personal", color: "#FF0000"), isGroupCalendar: false)
                     }
                 }
             }
@@ -59,16 +59,18 @@ struct ListCalendarView: View {
     
     private var addEventButton: some View {
         NavigationLink {
-            CreateEventView(events: $events, calendars: $calendars, startTime: selectedDate)
+            CreateEventView(events: $events, calendars: $calendars, startTime: selectedDate, selectedCalendar: defaultCalendar)
         } label: {
             Image(systemName: "plus")
-                .font(.system(size: 26, weight: .semibold))
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(Color.white)
-                .padding(10)
+                .padding(12)
                 .background(
                     Circle()
-                        .foregroundStyle(Color.black.opacity(0.9))
+                        .foregroundStyle(Color.accentColor)
+                        .shadow(color: Color.black.opacity(0.2), radius: 10, y: 1)
                 )
+                
         }
     }
 }

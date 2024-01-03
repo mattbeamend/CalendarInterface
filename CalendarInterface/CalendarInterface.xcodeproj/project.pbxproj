@@ -15,6 +15,8 @@
 		662161672AC5D08100347853 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662161662AC5D08100347853 /* CalendarViewModel.swift */; };
 		662161692AC5D09200347853 /* BlockCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662161682AC5D09200347853 /* BlockCalendarView.swift */; };
 		6621616E2AC627D400347853 /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621616D2AC627D400347853 /* CustomDatePicker.swift */; };
+		662DC1622B403CCF00108D0C /* GroupCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662DC1612B403CCF00108D0C /* GroupCalendarView.swift */; };
+		662DC1832B44AF4D00108D0C /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662DC1822B44AF4D00108D0C /* Person.swift */; };
 		663210C52B360794003D7C2C /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663210C42B360794003D7C2C /* CreateEventView.swift */; };
 		663210C72B3CC200003D7C2C /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663210C62B3CC200003D7C2C /* Color.swift */; };
 		663210C92B3CC8B4003D7C2C /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663210C82B3CC8B4003D7C2C /* EventDetailView.swift */; };
@@ -50,6 +52,8 @@
 		662161662AC5D08100347853 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		662161682AC5D09200347853 /* BlockCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCalendarView.swift; sourceTree = "<group>"; };
 		6621616D2AC627D400347853 /* CustomDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
+		662DC1612B403CCF00108D0C /* GroupCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCalendarView.swift; sourceTree = "<group>"; };
+		662DC1822B44AF4D00108D0C /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		663210C42B360794003D7C2C /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
 		663210C62B3CC200003D7C2C /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		663210C82B3CC8B4003D7C2C /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 			children = (
 				662161642AC5D06000347853 /* Event.swift */,
 				66AB48812B3EF50B00C1F48A /* GroupCalendar.swift */,
+				662DC1822B44AF4D00108D0C /* Person.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 			children = (
 				66AB48832B3F39A200C1F48A /* AddCalendarView.swift */,
 				66AB48872B3F3B2D00C1F48A /* GroupCalendarListingView.swift */,
+				662DC1612B403CCF00108D0C /* GroupCalendarView.swift */,
 			);
 			path = ManageCalendars;
 			sourceTree = "<group>";
@@ -317,6 +323,8 @@
 				662161652AC5D06000347853 /* Event.swift in Sources */,
 				662161572AC5D05100347853 /* CalendarInterfaceApp.swift in Sources */,
 				66654EEF2AD3194900D4CD36 /* EventList.swift in Sources */,
+				662DC1832B44AF4D00108D0C /* Person.swift in Sources */,
+				662DC1622B403CCF00108D0C /* GroupCalendarView.swift in Sources */,
 				66AB48862B3F3A4700C1F48A /* HomeView.swift in Sources */,
 				663B4CE72AC8283400B25826 /* ListCalendarView.swift in Sources */,
 				66AB48822B3EF50B00C1F48A /* GroupCalendar.swift in Sources */,
@@ -474,8 +482,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -484,9 +491,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.matthewsmith.CalendarInterface;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -505,8 +515,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -515,9 +524,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.matthewsmith.CalendarInterface;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
