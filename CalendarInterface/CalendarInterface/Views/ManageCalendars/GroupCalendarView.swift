@@ -28,7 +28,7 @@ struct GroupCalendarView: View {
                             .padding(.horizontal, 10)
                             .padding(.bottom, 5)
                             .padding(.top, 10)
-                        EventList(selectedDate: selectedDate, events: $events, calendars: $calendars, defaultCalendar: calendar, isGroupCalendar: true)
+                        EventList(selectedDate: $selectedDate, events: $events, calendars: $calendars, defaultCalendar: calendar, isGroupCalendar: true)
                     }
                 }
             }
@@ -88,7 +88,7 @@ struct GroupCalendarView: View {
     
     private var addEventButton: some View {
         NavigationLink {
-            CreateEventView(events: $events, calendars: $calendars, startTime: selectedDate, selectedCalendar: calendar)
+            CreateEventView(events: $events, calendars: $calendars, startTime: $selectedDate, selectedCalendar: calendar)
         } label: {
             Image(systemName: "plus")
                 .font(.system(size: 18, weight: .semibold))

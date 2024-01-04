@@ -280,10 +280,12 @@ extension EventDetailView {
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
                 .frame(height: 50)
+                .tint(Color.blue)
             DatePicker("Finish", selection: $editEventEnd, in: (Calendar.current.date(byAdding: .minute, value: 5, to: editEventStart) ?? Date.now)..., displayedComponents: !editEventAllDay ? [.hourAndMinute, .date] : .date)
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
                 .frame(height: 50)
+                .tint(Color.blue)
 
         }
         .padding(10)

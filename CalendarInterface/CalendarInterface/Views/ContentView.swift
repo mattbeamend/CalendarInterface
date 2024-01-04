@@ -5,6 +5,10 @@
 //  Created by Matthew Smith on 28/09/2023.
 //
 
+// Todo:
+// Fix home page layout on smaller devices
+
+
 
 import SwiftUI
 

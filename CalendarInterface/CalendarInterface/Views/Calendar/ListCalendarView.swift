@@ -40,7 +40,7 @@ struct ListCalendarView: View {
                         CustomDatePicker(color: Color.white, events: events, selectedDate: $selectedDate)
                             .padding(.horizontal, 10)
                             .padding(.bottom, 5)
-                        EventList(selectedDate: selectedDate, events: $events, calendars: $calendars, defaultCalendar: calendars.first ?? GroupCalendar(id: "1", name: "Personal", color: "#FF0000"), isGroupCalendar: false)
+                        EventList(selectedDate: $selectedDate, events: $events, calendars: $calendars, defaultCalendar: calendars.first ?? GroupCalendar(id: "1", name: "Personal", color: "#FF0000"), isGroupCalendar: false)
                     }
                 }
             }
@@ -59,7 +59,7 @@ struct ListCalendarView: View {
     
     private var addEventButton: some View {
         NavigationLink {
-            CreateEventView(events: $events, calendars: $calendars, startTime: selectedDate, selectedCalendar: defaultCalendar)
+            CreateEventView(events: $events, calendars: $calendars, startTime: $selectedDate, selectedCalendar: defaultCalendar)
         } label: {
             Image(systemName: "plus")
                 .font(.system(size: 18, weight: .semibold))

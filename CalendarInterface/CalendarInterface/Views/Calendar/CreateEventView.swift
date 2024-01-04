@@ -11,6 +11,9 @@ import SwiftUI
 struct CreateEventView: View {
     
     
+    @State var showPicker: String = ""
+    
+    
     @Binding var events: [Event]
     @Binding var calendars: [GroupCalendar]
     
@@ -22,7 +25,7 @@ struct CreateEventView: View {
     @State var showSelectFinish: Bool = false
     @State var showEventColor: Bool = false
     
-    @State var startTime: Date {
+    @Binding var startTime: Date {
         didSet {
             print("updated")
             self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
@@ -45,7 +48,6 @@ struct CreateEventView: View {
                         eventTextField
                         allDayToggle
                         datePicker
-                        
                         calendarSelector
                     }
                     .highPriorityGesture(DragGesture().onEnded({ gesture in
@@ -66,8 +68,13 @@ struct CreateEventView: View {
             }
             eventColor = Color(hex: selectedCalendar.color) ?? Color.accentColor
         })
+//        .onChange(of: startTime) { newValue in
+//            self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
+//        }
         .onChange(of: startTime) { newValue in
-            self.finishTime = Calendar.current.date(byAdding: .hour, value: 1, to: startTime) ?? Date.now
+            if(self.startTime > self.finishTime) {
+                self.finishTime = Calendar.current.date(byAdding: .minute, value: 5, to: startTime) ?? Date.now
+            }
         }
     }
 }
@@ -147,6 +154,8 @@ extension CreateEventView {
         .padding(.bottom, 10)
     }
     
+
+    
     private var datePicker: some View {
         VStack(spacing: 20) {
             DatePicker("Start", selection: $startTime, displayedComponents: !isAllDay ? [.hourAndMinute, .date] : .date)
@@ -213,6 +222,9 @@ extension CreateEventView {
             UserDefaults.standard.set(encoded, forKey: "events")
         }
     }
+    
+    
+    
     
 }
 

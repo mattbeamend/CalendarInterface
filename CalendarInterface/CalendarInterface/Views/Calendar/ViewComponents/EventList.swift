@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EventList: View {
     
-    var selectedDate: Date
+    @Binding var selectedDate: Date
     @Binding var events: [Event]
     @Binding var calendars: [GroupCalendar]
     
@@ -35,13 +35,13 @@ struct EventList: View {
             .padding(.bottom, 15)
     
             // Display all day events
-            ForEach(selectedDate.getDateEvents(events: events).filter { $0.allDay == true }) { event in
+            ForEach(selectedDate.getDateEvents(events: calendarEvents).filter { $0.allDay == true }) { event in
                 EventCard(event: event)
             }
             
             // Show divider if all day & normal events on date
-            if(!selectedDate.getDateEvents(events: events).filter {$0.allDay == true }.isEmpty
-               && !selectedDate.getDateEvents(events: events).filter {$0.allDay == false }.isEmpty) {
+            if(!selectedDate.getDateEvents(events: calendarEvents).filter {$0.allDay == true }.isEmpty
+               && !selectedDate.getDateEvents(events: calendarEvents).filter {$0.allDay == false }.isEmpty) {
                 Divider()
                     .foregroundStyle(Color.black.opacity(1))
                     .frame(height: 1)
@@ -74,10 +74,11 @@ struct EventList: View {
         .onAppear(perform: {
             if(isGroupCalendar) {
                 calendarEvents = events.filter({ $0.calendarId == defaultCalendar.id })
+                
             } else {
                 calendarEvents = events
             }
-            
+            print(calendarEvents)
         })
     }
 }
@@ -90,7 +91,7 @@ extension EventList {
                 .font(.system(size: 22, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black)
             NavigationLink {
-                CreateEventView(events: $events, calendars: $calendars, startTime: selectedDate, selectedCalendar: defaultCalendar)
+                CreateEventView(events: $events, calendars: $calendars, startTime: $selectedDate, selectedCalendar: defaultCalendar)
             } label: {
                 Text("Tap here to create.")
                     .font(.system(size: 16, weight: .medium, design: .rounded))

@@ -32,7 +32,7 @@ struct CustomDatePicker: View {
                 withAnimation(.default) {
                     date = Calendar.current.date(byAdding: component, to: date)!
                 }
-                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate)?.startOfMonth() ?? Date.now
+                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
             }
             if gesture.translation.width < 0 { // swipe left
                 var component = DateComponents()
@@ -40,12 +40,12 @@ struct CustomDatePicker: View {
                 withAnimation(.default) {
                     date = Calendar.current.date(byAdding: component, to: date)!
                 }
-                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate)?.startOfMonth() ?? Date.now
+                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
             }
         }))
-        .onAppear(perform: {
-            date = Date.now
-        })
+//        .onAppear(perform: {
+//            date = Date.now
+//        })
     }
 }
 
@@ -93,7 +93,7 @@ extension CustomDatePicker {
                 withAnimation(.default) {
                     date = Calendar.current.date(byAdding: component, to: date)!
                 }
-                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate)?.startOfMonth() ?? Date.now
+                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 18, weight: .bold))
@@ -105,7 +105,7 @@ extension CustomDatePicker {
                 withAnimation(.default) {
                     date = Calendar.current.date(byAdding: component, to: date)!
                 }
-                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate)?.startOfMonth() ?? Date.now
+                selectedDate = Calendar.current.date(byAdding: component, to: selectedDate) ?? Date.now
             } label: {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 18, weight: .bold))
